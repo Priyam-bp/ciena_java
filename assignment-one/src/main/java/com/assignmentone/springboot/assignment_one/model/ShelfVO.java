@@ -1,18 +1,18 @@
 package com.assignmentone.springboot.assignment_one.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 
 @Node("Shelf")
 public class ShelfVO {
-    @Id
+    @Id @GeneratedValue
     private long id;
     private String name;
     private String shelfType;
     private long shelfPositionId;
 
     public ShelfVO(long id, String name, String shelfType,long shelfPositionId){
-        this.id = id;
         this.name = name;
         this.shelfType = shelfType;
         this.shelfPositionId = shelfPositionId;

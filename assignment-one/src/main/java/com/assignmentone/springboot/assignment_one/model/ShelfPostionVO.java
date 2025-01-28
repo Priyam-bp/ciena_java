@@ -4,18 +4,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 @Node("Shelf Position")
 public class ShelfPostionVO {
-    @Id
+    @Id @GeneratedValue
     private long id;
     private String name;
     private long deviceId;
 
-    public ShelfPostionVO(long id,String name, long deviceId){
-        this.id = id;
+    public ShelfPostionVO(String name, long deviceId){
         this.name = name;
         this.deviceId = deviceId;
     }

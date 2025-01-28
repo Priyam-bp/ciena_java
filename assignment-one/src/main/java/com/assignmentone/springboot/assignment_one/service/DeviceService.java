@@ -51,6 +51,7 @@ public class DeviceService implements InventoryService{
     }
 
 
+    @Override
     @Transactional
     public void addShelfPositionToDevice(long deviceId,long shelfPositionId){
         Optional<Device> deviceOptional = deviceRepository.findById(deviceId);

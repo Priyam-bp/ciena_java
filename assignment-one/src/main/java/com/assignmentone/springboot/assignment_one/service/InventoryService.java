@@ -7,4 +7,5 @@ public interface InventoryService {
     Device getDevice(Long id);
     String deleteDevice(Long id);
     Device updateDevice(Long id,Device device);
+    void addShelfPositionToDevice(long deviceId,long shelfPositionId);
 }

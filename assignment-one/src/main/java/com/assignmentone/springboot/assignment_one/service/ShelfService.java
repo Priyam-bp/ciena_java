@@ -1,5 +1,7 @@
 package com.assignmentone.springboot.assignment_one.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +22,7 @@ public class ShelfService {
         return shelfRepository.findById(id).orElse(null);
     }
 
-    
+    public List<ShelfVO> getAllShelves(){
+        return shelfRepository.findAll();
+    }
 }
