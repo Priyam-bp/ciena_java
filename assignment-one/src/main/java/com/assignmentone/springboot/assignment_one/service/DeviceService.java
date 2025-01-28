@@ -21,4 +21,21 @@ public class DeviceService implements InventoryService{
     public Device getDevice(Long id) {
         return deviceRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public String deleteDevice(Long id){
+        deviceRepository.deleteById(id);
+        return "Device deleted of id:" + id;
+    }
+
+    @Override
+    public Device updateDevice(Long id, Device device){
+        
+        Device checkDevice = deviceRepository.findById(id).orElse(null);
+        if(checkDevice != null){
+            checkDevice.setName(device.getName());
+            checkDevice.setDeviceType(device.getDeviceType());
+        }
+        return deviceRepository.save(checkDevice);
+    }
 }

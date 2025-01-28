@@ -31,4 +31,14 @@ public class DeviceController {
     public Iterable<Device> getAllDevices() {
         return deviceRepository.findAll();
     }
+
+    @DeleteMapping("/{id}")
+    public String deleteDevice(@PathVariable Long id){
+        return inventoryService.deleteDevice(id);
+    }
+
+    @PutMapping("/{id}")
+    public Device updatDevice(@PathVariable Long id, @RequestBody Device device){
+        return inventoryService.updateDevice(id, device);
+    }
 }

@@ -30,6 +30,14 @@ public class Device {
         return deviceType;
     }
 
+    //setter functions
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setDeviceType(String deviceType){
+        this.deviceType = deviceType;
+    }
+
     @Override
     public String toString() {
         return "Device {id:" + id +", name: " + name +", device type:" +deviceType + "}";
