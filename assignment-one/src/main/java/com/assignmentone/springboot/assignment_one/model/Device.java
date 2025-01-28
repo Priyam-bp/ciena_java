@@ -1,11 +1,15 @@
 package com.assignmentone.springboot.assignment_one.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 
-@Node
+@Node("Device")
 public class Device {
     @Id
     private long id;
@@ -18,6 +22,11 @@ public class Device {
         this.deviceType = deviceType;
     }   
 
+    // HAS relationship (DeviceNode)-[HAS]->(ShelfPostitionNode)
+
+    @Relationship(type = "HAS",direction = Relationship.Direction.OUTGOING)
+    private Set<ShelfPostionVO> shelfPositions = new HashSet<>();
+
 
     //getter functions  
     public long getId(){
@@ -29,6 +38,9 @@ public class Device {
     public String getDeviceType(){
         return deviceType;
     }
+    public Set<ShelfPostionVO> getShelfPositions(){
+        return shelfPositions;
+    }
 
     //setter functions
     public void setName(String name){
@@ -37,6 +49,11 @@ public class Device {
     public void setDeviceType(String deviceType){
         this.deviceType = deviceType;
     }
+
+    public void setShelfPosition(Set<ShelfPostionVO> shelfPosition){
+        this.shelfPositions = shelfPosition;
+    }
+
 
     @Override
     public String toString() {

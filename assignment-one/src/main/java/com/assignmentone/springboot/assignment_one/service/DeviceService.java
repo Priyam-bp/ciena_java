@@ -1,16 +1,27 @@
 package com.assignmentone.springboot.assignment_one.service;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
+import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
 import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
+import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class DeviceService implements InventoryService{
    
     @Autowired
     private DeviceRepository deviceRepository;
+
+    @Autowired
+    private ShelfPositionRepository shelfPositionRepository;
 
     @Override
     public Device saveDevice(Device device){
@@ -37,5 +48,27 @@ public class DeviceService implements InventoryService{
             checkDevice.setDeviceType(device.getDeviceType());
         }
         return deviceRepository.save(checkDevice);
+    }
+
+
+    @Transactional
+    public void addShelfPositionToDevice(long deviceId,long shelfPositionId){
+        Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
+        Optional<ShelfPostionVO> shelfPositionOptional = shelfPositionRepository.findById(shelfPositionId);
+
+        if(deviceOptional.isPresent() && shelfPositionOptional.isPresent()){
+            Device device = deviceOptional.get();
+            ShelfPostionVO shelfPostionVO = shelfPositionOptional.get();
+
+            Set<ShelfPostionVO> shelfPositions = device.getShelfPositions();
+            if(shelfPositions == null){
+                shelfPositions = new HashSet<>();
+            }
+
+            shelfPositions.add(shelfPostionVO);
+            device.setShelfPosition(shelfPositions);
+
+            deviceRepository.save(device);
+        }
     }
 }
