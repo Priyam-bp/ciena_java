@@ -25,4 +25,8 @@ public class ShelfService {
     public List<ShelfVO> getAllShelves(){
         return shelfRepository.findAll();
     }
+
+    public void deleteShelfById(long id){
+        shelfRepository.deleteById(id);
+    }
 }

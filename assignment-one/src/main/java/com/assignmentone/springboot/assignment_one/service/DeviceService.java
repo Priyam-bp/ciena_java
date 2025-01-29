@@ -53,23 +53,22 @@ public class DeviceService implements InventoryService{
 
     @Override
     @Transactional
-    public void addShelfPositionToDevice(long deviceId,long shelfPositionId){
+    public void addShelfPositionToDevice(long deviceId, long shelfPositionId) {
         Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
         Optional<ShelfPostionVO> shelfPositionOptional = shelfPositionRepository.findById(shelfPositionId);
 
-        if(deviceOptional.isPresent() && shelfPositionOptional.isPresent()){
+        if (deviceOptional.isPresent() && shelfPositionOptional.isPresent()) {
             Device device = deviceOptional.get();
             ShelfPostionVO shelfPostionVO = shelfPositionOptional.get();
 
-            Set<ShelfPostionVO> shelfPositions = device.getShelfPositions();
-            if(shelfPositions == null){
-                shelfPositions = new HashSet<>();
+            if (device.getShelfPositions() == null) {
+                device.setShelfPosition(new HashSet<>());
             }
 
-            shelfPositions.add(shelfPostionVO);
-            device.setShelfPosition(shelfPositions);
-
-            deviceRepository.save(device);
+            if (!device.getShelfPositions().contains(shelfPostionVO)) {
+                device.getShelfPositions().add(shelfPostionVO);
+                deviceRepository.save(device); 
+            }
         }
     }
 }

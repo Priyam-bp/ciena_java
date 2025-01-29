@@ -8,31 +8,32 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
-@Node("Shelf Position")
+@Node("ShelfPosition")
 public class ShelfPostionVO {
-    @Id @GeneratedValue
-    private long id;
+    @Id 
+    @GeneratedValue
+    private Long id;
     private String name;
-    private long deviceId;
+
+    public ShelfPostionVO() {}
 
     public ShelfPostionVO(String name, long deviceId){
         this.name = name;
-        this.deviceId = deviceId;
     }
 
     //Relationship (shelfPostitionNode)-[HAS]->(shelf)
     @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
     private Set<ShelfVO> shelf = new HashSet<>();
 
-    public long getId(){
+    public Long getId(){
         return this.id;
     }
     public String getName(){
         return this.name;
     }
-    public long getDeviceId(){
-        return this.deviceId;
-    }
+    // public long getDeviceId(){
+    //     return this.deviceId;
+    // }
 
     public Set<ShelfVO> getShelf(){
         return shelf;
@@ -41,9 +42,9 @@ public class ShelfPostionVO {
     public void setName(String name){
         this.name = name;
     }
-    public void setDeviceId(long deviceId){
-        this.deviceId = deviceId;
-    }
+    // public void setDeviceId(long deviceId){
+    //     this.deviceId = deviceId;
+    // }
 
     public void setShelf(Set<ShelfVO> shelf){
         this.shelf = shelf;

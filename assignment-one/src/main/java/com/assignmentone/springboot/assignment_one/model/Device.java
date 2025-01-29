@@ -12,12 +12,17 @@ import org.springframework.data.neo4j.core.schema.Relationship;
 @Node("Device")
 public class Device {
     @Id
-    private long id;
+    @GeneratedValue
+    private Long id;
+
     private String name;
     private String deviceType;
 
-    public Device(long id, String name, String deviceType){
-        this.id = id;
+    public Device(){
+        
+    }
+
+    public Device(Long id, String name, String deviceType){
         this.name = name;
         this.deviceType = deviceType;
     }   

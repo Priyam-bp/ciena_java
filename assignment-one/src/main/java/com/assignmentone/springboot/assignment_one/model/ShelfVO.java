@@ -6,8 +6,10 @@ import org.springframework.data.neo4j.core.schema.Node;
 
 @Node("Shelf")
 public class ShelfVO {
-    @Id @GeneratedValue
+    @Id 
+    @GeneratedValue
     private long id;
+
     private String name;
     private String shelfType;
     private long shelfPositionId;

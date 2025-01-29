@@ -1,7 +1,6 @@
 package com.assignmentone.springboot.assignment_one.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.neo4j.core.transaction.Neo4jTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
