@@ -23,12 +23,12 @@ public class Device {
     }
 
     public Device(Long id, String name, String deviceType){
+        this.id = id;
         this.name = name;
         this.deviceType = deviceType;
     }   
 
     // HAS relationship (DeviceNode)-[HAS]->(ShelfPostitionNode)
-
     @Relationship(type = "HAS",direction = Relationship.Direction.OUTGOING)
     private Set<ShelfPostionVO> shelfPositions = new HashSet<>();
 

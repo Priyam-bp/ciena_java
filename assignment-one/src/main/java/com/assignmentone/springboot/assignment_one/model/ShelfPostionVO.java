@@ -14,6 +14,7 @@ public class ShelfPostionVO {
     @GeneratedValue
     private Long id;
     private String name;
+    
 
     public ShelfPostionVO() {}
 
@@ -25,15 +26,19 @@ public class ShelfPostionVO {
     @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
     private Set<ShelfVO> shelf = new HashSet<>();
 
+    //Relationship (Device)-[HAS]->(shelfPosition)
+    @Relationship(type = "HAS", direction = Relationship.Direction.INCOMING)
+    private Set<Device> devices = new HashSet<>();
+
     public Long getId(){
         return this.id;
     }
     public String getName(){
         return this.name;
     }
-    // public long getDeviceId(){
-    //     return this.deviceId;
-    // }
+    public Set<Device> getDevices(){
+        return this.devices;
+    }
 
     public Set<ShelfVO> getShelf(){
         return shelf;
@@ -42,9 +47,9 @@ public class ShelfPostionVO {
     public void setName(String name){
         this.name = name;
     }
-    // public void setDeviceId(long deviceId){
-    //     this.deviceId = deviceId;
-    // }
+    public void setDevices(Set<Device> devices){
+        this.devices = devices;
+    }
 
     public void setShelf(Set<ShelfVO> shelf){
         this.shelf = shelf;

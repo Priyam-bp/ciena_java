@@ -2,7 +2,6 @@ package com.assignmentone.springboot.assignment_one.service;
 
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,13 +46,16 @@ public class DeviceService implements InventoryService{
             checkDevice.setName(device.getName());
             checkDevice.setDeviceType(device.getDeviceType());
         }
-        return deviceRepository.save(checkDevice);
+        if (checkDevice != null) {
+            return deviceRepository.save(checkDevice);
+        }
+        return null;
     }
 
 
     @Override
     @Transactional
-    public void addShelfPositionToDevice(long deviceId, long shelfPositionId) {
+    public void addShelfPositionToDevice(Long deviceId, Long shelfPositionId) {
         Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
         Optional<ShelfPostionVO> shelfPositionOptional = shelfPositionRepository.findById(shelfPositionId);
 
@@ -65,10 +67,15 @@ public class DeviceService implements InventoryService{
                 device.setShelfPosition(new HashSet<>());
             }
 
-            if (!device.getShelfPositions().contains(shelfPostionVO)) {
-                device.getShelfPositions().add(shelfPostionVO);
-                deviceRepository.save(device); 
+            if(shelfPostionVO.getDevices() == null){
+                shelfPostionVO.setDevices(new HashSet<>());
             }
+
+            device.getShelfPositions().add(shelfPostionVO);
+            shelfPostionVO.getDevices().add(device);
+
+            deviceRepository.save(device);
+            shelfPositionRepository.save(shelfPostionVO);
         }
     }
 }

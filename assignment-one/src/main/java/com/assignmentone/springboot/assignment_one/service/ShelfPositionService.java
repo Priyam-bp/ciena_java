@@ -37,20 +37,25 @@ public class ShelfPositionService {
     public void addShelfToShelfPosition(long shelfId, long shelfPositionId){
         Optional<ShelfVO> shelfOptional = shelfRepository.findById(shelfId);
         Optional<ShelfPostionVO> shelfPositionOptional = shelfPositionRepository.findById(shelfPositionId);
-
+    
         if(shelfOptional.isPresent() && shelfPositionOptional.isPresent()){
             ShelfVO shelf = shelfOptional.get();
             ShelfPostionVO shelfPosition = shelfPositionOptional.get();
 
+            shelf.setShelfPositionId(shelfPositionId);
+    
             Set<ShelfVO> shelfs = shelfPosition.getShelf();
             if(shelfs == null){
                 shelfs = new HashSet<>();
             }
-
-            shelfs.add(shelf);
-            shelfPosition.setShelf(shelfs);
-
-            shelfPositionRepository.save(shelfPosition);
+    
+            if (!shelfs.contains(shelf)) {
+                shelfs.add(shelf);
+                shelfPosition.setShelf(shelfs);
+                
+                shelfPositionRepository.save(shelfPosition);
+            }
         }
     }
+    
 }

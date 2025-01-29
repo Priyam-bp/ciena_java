@@ -8,16 +8,17 @@ import org.springframework.data.neo4j.core.schema.Node;
 public class ShelfVO {
     @Id 
     @GeneratedValue
-    private long id;
+    private Long id;
 
     private String name;
     private String shelfType;
-    private long shelfPositionId;
+    private Long shelfPositionId;
 
-    public ShelfVO(long id, String name, String shelfType,long shelfPositionId){
+    public ShelfVO(Long id, String name, String shelfType){
+        this.id = id;
         this.name = name;
         this.shelfType = shelfType;
-        this.shelfPositionId = shelfPositionId;
+        this.shelfPositionId = null;
     }
 
     // Getter functions
