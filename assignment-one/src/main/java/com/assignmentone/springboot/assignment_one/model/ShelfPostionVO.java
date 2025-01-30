@@ -18,7 +18,7 @@ public class ShelfPostionVO {
 
     public ShelfPostionVO() {}
 
-    public ShelfPostionVO(String name, long deviceId){
+    public ShelfPostionVO(String name){
         this.name = name;
     }
 

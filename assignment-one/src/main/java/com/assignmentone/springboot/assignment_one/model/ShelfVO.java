@@ -22,7 +22,7 @@ public class ShelfVO {
     }
 
     // Getter functions
-    public long getId(){
+    public Long getId(){
         return this.id;
     }
     public String getName(){
@@ -31,7 +31,7 @@ public class ShelfVO {
     public String getShelfType(){
         return this.shelfType;
     }
-    public long getShelfPositionId(){
+    public Long getShelfPositionId(){
         return this.shelfPositionId;
     }
 
@@ -45,7 +45,7 @@ public class ShelfVO {
     public void setShelfType(String shelfType){
         this.shelfType = shelfType;
     }
-    public void setShelfPositionId(long shelfPositionId){
+    public void setShelfPositionId(Long shelfPositionId){
         this.shelfPositionId = shelfPositionId;
     }
 

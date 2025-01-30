@@ -43,6 +43,7 @@ public class Device {
     public String getDeviceType(){
         return deviceType;
     }
+
     public Set<ShelfPostionVO> getShelfPositions(){
         return shelfPositions;
     }
