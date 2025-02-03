@@ -1,7 +1,10 @@
 package com.assignmentone.springboot.assignment_one.service_tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,6 +22,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import com.assignmentone.springboot.assignment_one.model.Device;
 import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
 import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
+import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 import com.assignmentone.springboot.assignment_one.service.DeviceService;
 
 @SpringBootTest
@@ -29,6 +33,9 @@ public class DeviceServiceTests {
 
     @MockitoBean
     private DeviceRepository deviceRepository;
+
+    @MockitoBean
+    private ShelfPositionRepository shelfPositionRepository;
 
     private Device device1;
     private Device device2;
@@ -73,5 +80,29 @@ public class DeviceServiceTests {
         deviceService.deleteDevice(3L);
         verify(deviceRepository,times(1)).deleteById(3L);
     }
+
+    @Test
+    public void updateUserById(){
+        Device existingDevice = new Device(3L, "device3","type C");
+        Device updatedDevice = new Device(3L, "updated device","type D");
+
+        when(deviceRepository.findById(3L)).thenReturn(Optional.of(existingDevice));
+        when(deviceRepository.save(any(Device.class))).thenReturn(updatedDevice);
+
+        Device result = deviceService.updateDevice(3L, updatedDevice);
+        assertNotNull(result);
+        assertEquals("updated device", result.getName());
+    }
     
+    @Test
+    public void addShelfPositionToDevice(){
+        when(deviceRepository.findById(1L)).thenReturn(Optional.of(device1));
+        when(shelfPositionRepository.findById(2L)).thenReturn(Optional.of((shelfPosition1)));
+
+        deviceService.addShelfPositionToDevice(1L, 2L);
+
+        assertTrue(device1.getShelfPositions().contains(shelfPosition1));
+        verify(deviceRepository, times(1)).save(device1);
+        verify(shelfPositionRepository, times(1)).save(shelfPosition1);
+    }
 }

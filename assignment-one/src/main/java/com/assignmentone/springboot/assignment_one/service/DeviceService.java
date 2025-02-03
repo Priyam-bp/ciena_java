@@ -70,15 +70,12 @@ public class DeviceService implements InventoryService{
             ShelfPostionVO shelfPostionVO = shelfPositionOptional.get();
 
             if (device.getShelfPositions() == null) {
-                device.setShelfPosition(new HashSet<>());
+                device.setShelfPositions(new HashSet<>());
             }
 
-            if(shelfPostionVO.getDevices() == null){
-                shelfPostionVO.setDevices(new HashSet<>());
-            }
 
             device.getShelfPositions().add(shelfPostionVO);
-            shelfPostionVO.getDevices().add(device);
+            shelfPostionVO.setDevices(device);
 
             deviceRepository.save(device);
             shelfPositionRepository.save(shelfPostionVO);
