@@ -30,7 +30,7 @@ public class DeviceController {
 
     @GetMapping
     public Iterable<Device> getAllDevices() {
-        return deviceRepository.findAll();
+        return inventoryService.getAllDevices();
     }
 
     @DeleteMapping("/{id}")
