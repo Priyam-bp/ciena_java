@@ -14,8 +14,16 @@ public class ShelfVO {
     private String shelfType;
     private Long shelfPositionId;
 
+    public ShelfVO(){}
+
     public ShelfVO(Long id, String name, String shelfType){
         this.id = id;
+        this.name = name;
+        this.shelfType = shelfType;
+        this.shelfPositionId = null;
+    }
+
+    public ShelfVO( String name, String shelfType){
         this.name = name;
         this.shelfType = shelfType;
         this.shelfPositionId = null;
