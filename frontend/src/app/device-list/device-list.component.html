@@ -1,0 +1,20 @@
+<h1>Device List</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Device type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr >
+            @for (device of deviceItems(); track $index) {
+                <td>{{device.id}}</td>
+                <td>{{device.name}}</td>
+                <td>{{device.deviceType}}</td>
+            }
+        </tr>
+    </tbody>
+</table>
