@@ -2,13 +2,12 @@ package com.assignmentone.springboot.assignment_one.service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
-import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 
@@ -30,7 +29,7 @@ public class DeviceService implements InventoryService{
 
     @Override
     public Device getDevice(Long id) {
-        return deviceRepository.findById(id).orElse(null);
+        return deviceRepository.findById(id).orElseThrow(()->new RuntimeException("Device not found"));
     }
 
     @Override
@@ -42,16 +41,12 @@ public class DeviceService implements InventoryService{
     @Override
     public Device updateDevice(Long id, Device device){
         
-        Device checkDevice = deviceRepository.findById(id).orElse(null);
-        if(checkDevice != null){
-            checkDevice.setName(device.getName());
-            checkDevice.setDeviceType(device.getDeviceType());
-        }
-        if (checkDevice != null) {
-            return deviceRepository.save(checkDevice);
-        }
-        return null;
+        Device checkDevice = deviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Device not found"));
+        checkDevice.setName(device.getName());
+        checkDevice.setDeviceType(device.getDeviceType());
+        return deviceRepository.save(checkDevice);
     }
+    
 
     @Override
     public List<Device> getAllDevices(){
@@ -62,23 +57,20 @@ public class DeviceService implements InventoryService{
     @Override
     @Transactional
     public void addShelfPositionToDevice(Long deviceId, Long shelfPositionId) {
-        Optional<Device> deviceOptional = deviceRepository.findById(deviceId);
-        Optional<ShelfPostionVO> shelfPositionOptional = shelfPositionRepository.findById(shelfPositionId);
+        Device device = deviceRepository.findById(deviceId).orElseThrow(() -> new RuntimeException("Device not found"));
+        ShelfPositionVO shelfPosition = shelfPositionRepository.findById(shelfPositionId).orElseThrow(() -> new RuntimeException("Shelf Position not found"));
 
-        if (deviceOptional.isPresent() && shelfPositionOptional.isPresent()) {
-            Device device = deviceOptional.get();
-            ShelfPostionVO shelfPostionVO = shelfPositionOptional.get();
-
-            if (device.getShelfPositions() == null) {
-                device.setShelfPositions(new HashSet<>());
-            }
-
-
-            device.getShelfPositions().add(shelfPostionVO);
-            shelfPostionVO.setDevices(device);
-
-            deviceRepository.save(device);
-            shelfPositionRepository.save(shelfPostionVO);
+        if(shelfPosition.getDevice() != null){
+            throw new RuntimeException("Shelf position already has a Device");
         }
+        if(device.getShelfPositions() == null){
+            device.setShelfPositions(new HashSet<>());
+        }
+
+        shelfPosition.setDevice(device);
+        device.getShelfPositions().add(shelfPosition);
+
+        deviceRepository.save(device);
+        shelfPositionRepository.save(shelfPosition);
     }
 }

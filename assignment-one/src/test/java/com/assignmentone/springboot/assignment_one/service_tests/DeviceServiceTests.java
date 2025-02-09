@@ -20,7 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
-import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 import com.assignmentone.springboot.assignment_one.service.DeviceService;
@@ -39,13 +39,13 @@ public class DeviceServiceTests {
 
     private Device device1;
     private Device device2;
-    private ShelfPostionVO shelfPosition1;
+    private ShelfPositionVO shelfPosition1;
 
     @BeforeEach
     public void setUp(){
         device1 = new Device(1L, "device1", "deviceType1");
         device2 = new Device (2L, "device2", "deviceType2");
-        shelfPosition1 = new ShelfPostionVO("shelfPosition1");
+        shelfPosition1 = new ShelfPositionVO("shelfPosition1");
     }
 
     @Test

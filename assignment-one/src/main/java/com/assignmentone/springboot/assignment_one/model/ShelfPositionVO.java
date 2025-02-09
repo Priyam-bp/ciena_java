@@ -1,62 +1,60 @@
 package com.assignmentone.springboot.assignment_one.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 @Node("ShelfPosition")
-public class ShelfPostionVO {
+public class ShelfPositionVO {
     @Id 
     @GeneratedValue
     private Long id;
     private String name;
-    
 
-    public ShelfPostionVO() {}
+    public ShelfPositionVO() {}
 
-    public ShelfPostionVO(String name){
+    public ShelfPositionVO(String name) {
         this.name = name;
     }
 
-    //Relationship (shelfPostitionNode)-[HAS]->(shelf)
+    // One-to-One Relationship (ShelfPositionVO)-[HAS]->(ShelfVO)
     @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
-    private Set<ShelfVO> shelf = new HashSet<>();
+    private ShelfVO shelf;
 
-    //Relationship (Device)-[HAS]->(shelfPosition)
+    // Relationship (Device)-[HAS]->(ShelfPositionVO)
     @Relationship(type = "HAS", direction = Relationship.Direction.INCOMING)
     private Device device;
 
-    public Long getId(){
+    public Long getId() {
         return this.id;
     }
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    public Device getDevices(){
+
+    public Device getDevice() {
         return this.device;
     }
 
-    public Set<ShelfVO> getShelf(){
+    public ShelfVO getShelf() {
         return shelf;
     }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this.name = name;
     }
-    public void setDevices(Device device){
+
+    public void setDevice(Device device) {
         this.device = device;
     }
 
-    public void setShelf(Set<ShelfVO> shelf){
+    public void setShelf(ShelfVO shelf) {
         this.shelf = shelf;
     }
 }
-

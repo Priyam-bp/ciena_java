@@ -1,14 +1,11 @@
 package com.assignmentone.springboot.assignment_one.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
@@ -22,40 +19,30 @@ public class ShelfPositionService {
     @Autowired
     private ShelfRepository shelfRepository;
 
-    public ShelfPostionVO saveSheldPostion(ShelfPostionVO shelfPosition){
+    public ShelfPositionVO saveSheldPostion(ShelfPositionVO shelfPosition){
         return shelfPositionRepository.save(shelfPosition);
     }
 
-    public ShelfPostionVO getShelfPostion(long id){
-        return shelfPositionRepository.findById(id).orElse(null);
+    public ShelfPositionVO getShelfPostion(long id){
+        return shelfPositionRepository.findById(id).orElseThrow(()-> new RuntimeException("Shelf position not found"));
     }
 
-    public List<ShelfPostionVO> getAllshelfPositions(){
+    public List<ShelfPositionVO> getAllshelfPositions(){
         return shelfPositionRepository.findAll();
     }
 
     public void addShelfToShelfPosition(long shelfId, long shelfPositionId){
-        Optional<ShelfVO> shelfOptional = shelfRepository.findById(shelfId);
-        Optional<ShelfPostionVO> shelfPositionOptional = shelfPositionRepository.findById(shelfPositionId);
-    
-        if(shelfOptional.isPresent() && shelfPositionOptional.isPresent()){
-            ShelfVO shelf = shelfOptional.get();
-            ShelfPostionVO shelfPosition = shelfPositionOptional.get();
+        ShelfVO shelf = shelfRepository.findById(shelfId).orElseThrow(()-> new RuntimeException("Shelf not found"));
+        ShelfPositionVO shelfPosition = shelfPositionRepository.findById(shelfPositionId).orElseThrow(()-> new RuntimeException("Shelf position not found"));
 
-            shelf.setShelfPositionId(shelfPositionId);
-    
-            Set<ShelfVO> shelfs = shelfPosition.getShelf();
-            if(shelfs == null){
-                shelfs = new HashSet<>();
-            }
-    
-            if (!shelfs.contains(shelf)) {
-                shelfs.add(shelf);
-                shelfPosition.setShelf(shelfs);
-                
-                shelfPositionRepository.save(shelfPosition);
-            }
+        if(shelfPosition.getShelf() != null){
+            throw new RuntimeException("Shelf position already has a shelf assigned");
         }
+
+        shelf.setShelfPositionId(shelfPositionId);
+        shelfRepository.save(shelf);
+        shelfPositionRepository.save(shelfPosition);
+
     }
     
 }

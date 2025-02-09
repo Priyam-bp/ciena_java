@@ -8,7 +8,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
@@ -37,15 +36,15 @@ public class ShelfPostionTests {
     @Mock
     private ShelfRepository shelfRepository;
 
-    private ShelfPostionVO shelfPosition1;
-    private ShelfPostionVO shelfPosition2;
+    private ShelfPositionVO shelfPosition1;
+    private ShelfPositionVO shelfPosition2;
     private ShelfVO shelf1;
 
     @BeforeEach
     public void setUp(){
-        shelfPosition1 = new ShelfPostionVO("Shelf Postion 1");
+        shelfPosition1 = new ShelfPositionVO("Shelf Postion 1");
         shelfPosition1.setId(1L);
-        shelfPosition2 = new ShelfPostionVO("Shelf Postion 2");
+        shelfPosition2 = new ShelfPositionVO("Shelf Postion 2");
         shelfPosition2.setId(2L);
         
         shelf1 = new ShelfVO(1L, "shelf 1", "type A");
@@ -55,7 +54,7 @@ public class ShelfPostionTests {
     public void getShelfPositionById(){
        when(shelfPositionRepository.findById(1L)).thenReturn(Optional.of(shelfPosition1));
 
-        ShelfPostionVO result = shelfPositionService.getShelfPostion(1L);
+        ShelfPositionVO result = shelfPositionService.getShelfPostion(1L);
 
         assertNotNull(result);
         assertEquals("Shelf Postion 1", result.getName());
@@ -71,11 +70,11 @@ public class ShelfPostionTests {
 
     @Test
     public void saveShelfPostion(){
-        when(shelfPositionRepository.save(any(ShelfPostionVO.class))).thenReturn(shelfPosition1);
+        when(shelfPositionRepository.save(any(ShelfPositionVO.class))).thenReturn(shelfPosition1);
 
-        ShelfPostionVO res = shelfPositionService.saveSheldPostion(shelfPosition1);
+        ShelfPositionVO res = shelfPositionService.saveSheldPostion(shelfPosition1);
         assertEquals(res, shelfPosition1);
-        verify(shelfPositionRepository, times(1)).save(any(ShelfPostionVO.class));
+        verify(shelfPositionRepository, times(1)).save(any(ShelfPositionVO.class));
     }
 
     @Test
@@ -85,6 +84,6 @@ public class ShelfPostionTests {
 
         shelfPositionService.addShelfToShelfPosition(1L, 1L);
 
-        assertTrue(shelfPosition1.getShelf().contains(shelf1));
+        assertTrue(shelfPosition1.getShelf() == shelf1);
     }
 }

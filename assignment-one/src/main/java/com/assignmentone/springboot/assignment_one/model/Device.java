@@ -28,7 +28,7 @@ public class Device {
 
     // HAS relationship (DeviceNode)-[HAS]->(ShelfPositionNode)
     @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
-    private Set<ShelfPostionVO> shelfPositions = new HashSet<>();
+    private Set<ShelfPositionVO> shelfPositions = new HashSet<>();
 
     // Getter functions  
     public long getId() {
@@ -43,7 +43,7 @@ public class Device {
         return deviceType;
     }
 
-    public Set<ShelfPostionVO> getShelfPositions() {
+    public Set<ShelfPositionVO> getShelfPositions() {
         return shelfPositions;
     }
 
@@ -56,7 +56,7 @@ public class Device {
         this.deviceType = deviceType;
     }
 
-    public void setShelfPositions(Set<ShelfPostionVO> shelfPositions) {
+    public void setShelfPositions(Set<ShelfPositionVO> shelfPositions) {
         this.shelfPositions = shelfPositions;
     }
 

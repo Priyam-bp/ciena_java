@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.assignmentone.springboot.assignment_one.model.AddShelfToShelfPosition;
-import com.assignmentone.springboot.assignment_one.model.ShelfPostionVO;
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.service.ShelfPositionService;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -24,17 +24,17 @@ public class ShelfPostitionController {
     private ShelfPositionService shelfPositionService;
 
     @PostMapping
-    public ShelfPostionVO saveShelfPostion(@RequestBody ShelfPostionVO shelfPosition){
+    public ShelfPositionVO saveShelfPostion(@RequestBody ShelfPositionVO shelfPosition){
         return shelfPositionService.saveSheldPostion(shelfPosition);
     }   
 
     @GetMapping("/{id}")
-    public ShelfPostionVO getShelfPositionById(@PathVariable long id){
+    public ShelfPositionVO getShelfPositionById(@PathVariable long id){
         return shelfPositionService.getShelfPostion(id);
     }
 
     @GetMapping
-    public List<ShelfPostionVO> getAllShelfPositions(){
+    public List<ShelfPositionVO> getAllShelfPositions(){
         return shelfPositionService.getAllshelfPositions();
     }
 

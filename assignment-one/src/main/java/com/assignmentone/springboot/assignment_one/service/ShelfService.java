@@ -19,7 +19,7 @@ public class ShelfService {
     }
 
     public ShelfVO getShelf(long id){
-        return shelfRepository.findById(id).orElse(null);
+        return shelfRepository.findById(id).orElseThrow(()-> new RuntimeException("Shelf not found"));
     }
 
     public List<ShelfVO> getAllShelves(){
