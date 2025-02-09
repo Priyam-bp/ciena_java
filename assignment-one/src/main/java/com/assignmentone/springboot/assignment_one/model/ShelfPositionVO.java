@@ -5,6 +5,8 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Node("ShelfPosition")
 public class ShelfPositionVO {
     @Id 
@@ -24,6 +26,7 @@ public class ShelfPositionVO {
 
     // Relationship (Device)-[HAS]->(ShelfPositionVO)
     @Relationship(type = "HAS", direction = Relationship.Direction.INCOMING)
+    @JsonIgnoreProperties("shelfPosition")
     private Device device;
 
     public Long getId() {

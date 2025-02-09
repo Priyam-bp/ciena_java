@@ -6,15 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
-import org.apache.tomcat.util.http.parser.MediaType;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,11 +32,8 @@ public class ShelfControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Mock
     private ShelfService shelfService; 
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Test
     public void getAllShelves() throws Exception {
