@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Device } from '../model/device';
 import { HttpClient } from '@angular/common/http';
+import { Device } from '../../model/device/device';
 
 
 @Injectable({

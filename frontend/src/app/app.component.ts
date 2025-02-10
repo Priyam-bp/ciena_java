@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DeviceListComponent } from './device-list/device-list.component';
+import { HeaderComponent } from "./components/header/header.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [DeviceListComponent],
-  templateUrl: './app.component.html',
+  imports: [RouterOutlet, HeaderComponent],
+  template: `
+    <app-header></app-header>
+    <main>
+      <router-outlet/>
+    </main>
+  `,
   styleUrl: './app.component.css'
 })
 export class AppComponent {

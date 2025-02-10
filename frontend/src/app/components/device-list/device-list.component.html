@@ -9,12 +9,12 @@
         </tr>
     </thead>
     <tbody>
-        <tr >
-            @for (device of deviceItems(); track $index) {
+        @for (device of deviceItems(); track $index) {
+            <tr>
                 <td>{{device.id}}</td>
                 <td>{{device.name}}</td>
                 <td>{{device.deviceType}}</td>
-            }
-        </tr>
+            </tr>
+        }
     </tbody>
 </table>

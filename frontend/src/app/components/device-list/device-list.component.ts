@@ -1,9 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 
-import { DeviceService } from '../services/device.service';
-import { Device } from '../model/device';
+
+import { Device } from '../../model/device/device';
 import { catchError, of } from 'rxjs';
+import { DeviceService } from '../../services/deviceService/device.service';
 
 @Component({
   selector: 'app-device-list',
