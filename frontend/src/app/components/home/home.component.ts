@@ -1,0 +1,33 @@
+import { Component, signal } from '@angular/core';
+
+@Component({
+  selector: 'app-home',
+  imports: [],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
+})
+export class HomeComponent {
+  cardItems = signal([
+    {
+      id: 1,
+      name: "Device",
+      subHeading:" Manage your device inventory",
+      button: "+ Add Device",
+      iconLink:"bi bi-laptop"
+    },
+    {
+      id:2 ,
+      name:"Shelf",
+      subHeading:"Organize your storage shelves",
+      button:"+ Add Shelf",
+      iconLink:'bi bi-box-seam'
+    },
+    {
+      id: 3,
+      name:"Shelf Position",
+      subHeading:"Manage your shelf positions",
+      button:"+ Add Position",
+      iconLink:'bi bi-grid'
+    }
+  ])
+}

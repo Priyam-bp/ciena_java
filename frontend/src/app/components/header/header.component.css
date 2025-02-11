@@ -1,0 +1,16 @@
+.heading{
+    font: bold;
+    color: gray;
+    font-size: large;
+}
+.nav{
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.navlinks{
+    align-items: flex-end;
+    justify-self: right;
+}

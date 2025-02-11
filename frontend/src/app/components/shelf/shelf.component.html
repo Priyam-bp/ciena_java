@@ -1,1 +1,29 @@
-<p>shelf works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Shelf Positions</h1>
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">name</th>
+            <th scope="col">Has Device</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (shelf of shelfItems(); track $index) {
+            <tr>
+                <td>{{shelf.id}}</td>
+                <td>{{shelf.name}}</td>
+                <td>{{shelf.shelfType}}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+</body>
+</html>
