@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="head">
+        <div class="headingText text-center">Welcome to Inventory System</div>
+    </div>
+    <div class="cards">
+        @for (cardData of cardItems(); track $index) {
+            <div class="card">
+                <h3>{{cardData.name}}</h3>
+                <h5>{{cardData.subHeading}}</h5>
+                <img [src]="cardData.iconLink" alt="">
+                <button>{{cardData.button}}</button>
+            </div>
+        }
+    </div>
+</body>
+</html>

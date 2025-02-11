@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Node("Device")
 public class Device {
@@ -28,6 +29,7 @@ public class Device {
 
     // HAS relationship (DeviceNode)-[HAS]->(ShelfPositionNode)
     @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
+    @JsonIgnoreProperties("device")
     private Set<ShelfPositionVO> shelfPositions = new HashSet<>();
 
     // Getter functions  

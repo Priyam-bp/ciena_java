@@ -34,6 +34,9 @@ public class DeviceService implements InventoryService{
 
     @Override
     public String deleteDevice(Long id){
+        if(!deviceRepository.existsById(id)){
+            throw new RuntimeException("Device not found");
+        }
         deviceRepository.deleteById(id);
         return "Device deleted of id:" + id;
     }

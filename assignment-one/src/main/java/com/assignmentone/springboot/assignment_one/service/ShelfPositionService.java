@@ -39,10 +39,8 @@ public class ShelfPositionService {
             throw new RuntimeException("Shelf position already has a shelf assigned");
         }
 
-        shelf.setShelfPositionId(shelfPositionId);
-        shelfRepository.save(shelf);
+        shelfPosition.setShelf(shelf);
         shelfPositionRepository.save(shelfPosition);
-
     }
     
 }
