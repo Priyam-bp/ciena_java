@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ShelfService } from '../../services/shelfService/shelf-service.service';
 import { Shelf } from '../../model/shelf/shelf';
 import { catchError, of } from 'rxjs';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-shelf',

@@ -7,6 +7,10 @@
 </head>
 <body>
     <h1>Shelf Positions</h1>
+    @if (!shelfItems().length) {
+      <p>Loading...</p>
+    }
+
     <table class="table">
         <thead>
           <tr>

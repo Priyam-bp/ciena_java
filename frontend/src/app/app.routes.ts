@@ -26,7 +26,7 @@ export const routes: Routes = [
         }
     },
     {
-        path: 'shelves',
+        path: 'shelf',
         pathMatch:"full",
         loadComponent: async ()=>{
             const m = await import('./components/shelf/shelf.component');
