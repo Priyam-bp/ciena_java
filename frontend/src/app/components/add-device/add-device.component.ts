@@ -15,7 +15,6 @@ export class AddDeviceComponent implements OnInit{
   deviceService = inject(DeviceService)
 
   device: Device ={
-    id: 0,
     name:'',
     deviceType:''
   }
@@ -23,7 +22,10 @@ export class AddDeviceComponent implements OnInit{
   ngOnInit(): void {
       
   }
-  saveDevie(deviceForm :NgForm): void{
+  saveDevice(): void{
+    debugger;
+    console.log();
+    
     this.deviceService.saveDevice(this.device).subscribe({
       next: (res: Device)=>{
         console.log(res);

@@ -1,5 +1,5 @@
 export type Device = {
-    id: number;
+    id?: number;
     name: string;
     deviceType: string;
 }

@@ -16,7 +16,7 @@ export class HomeComponent {
       button: "+ Add Device",
       iconLink:"bi bi-laptop",
       color:"blue",
-      path:'devices/adddevice'
+      path:'/adddevice'
     },
     {
       id:2 ,

@@ -1,25 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="head">
-        <div class="headingText text-center">Welcome to Inventory System</div>
+<div class="head">
+  <div class="headingText text-center">Welcome to Inventory System</div>
+</div>
+<div class="cards">
+  @for (cardData of cardItems(); track $index) {
+  <div class="card">
+    <h3>{{ cardData.name }}</h3>
+    <p>{{ cardData.subHeading }}</p>
+    <div class="cardIcons">
+      <i
+        class="{{ cardData.iconLink }} icons"
+        [style.color]="cardData.color"
+      ></i>
+      <a [routerLink]="cardData.path"
+        ><button type="button" class="btn btn-dark">
+          {{ cardData.button }}
+        </button></a
+      >
     </div>
-    <div class="cards">
-        @for (cardData of cardItems(); track $index) {
-            <div class="card">
-                <h3>{{cardData.name}}</h3>
-                <p>{{cardData.subHeading}}</p>
-                <div class="cardIcons">
-                    <i class="{{cardData.iconLink}} icons" [style.color]="cardData.color"></i>
-                    <a [routerLink]="cardData.path"><button type="button" class="btn btn-dark">{{cardData.button}}</button></a>
-                </div>
-            </div>
-        }
-    </div>
-</body>
-</html>
+  </div>
+  }
+</div>

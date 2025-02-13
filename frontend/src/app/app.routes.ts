@@ -34,7 +34,7 @@ export const routes: Routes = [
         }
     },
     {
-        path:"devices/adddevice",
+        path:"adddevice",
         pathMatch:'full',
         loadComponent: async()=>{
             const m = await import('./components/add-device/add-device.component');
