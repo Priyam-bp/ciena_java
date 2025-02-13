@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Device } from '../../model/device/device';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
@@ -14,8 +15,14 @@ export class DeviceService {
   //   deviceType:"device type 1"
   // }]
 
-    getAllDevices(){
-      const url = `http://localhost:8080/devices`
-      return this.http.get<Array<Device>>(url);
-    }
+  url = `http://localhost:8080`;
+  
+  getAllDevices(){
+    return this.http.get<Array<Device>>(`${this.url}/devices`);
+  }
+
+  public saveDevice(device: Device): Observable<Device>{
+    return this.http.post<Device>(`${this.url}/devices`,device);
+  }
+
 }

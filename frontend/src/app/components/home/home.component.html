@@ -16,7 +16,7 @@
                 <p>{{cardData.subHeading}}</p>
                 <div class="cardIcons">
                     <i class="{{cardData.iconLink}} icons" [style.color]="cardData.color"></i>
-                    <button type="button" class="btn btn-dark">{{cardData.button}}</button>
+                    <a [routerLink]="cardData.path"><button type="button" class="btn btn-dark">{{cardData.button}}</button></a>
                 </div>
             </div>
         }

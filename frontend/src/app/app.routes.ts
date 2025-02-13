@@ -32,5 +32,13 @@ export const routes: Routes = [
             const m = await import('./components/shelf/shelf.component');
             return m.ShelfComponent;
         }
+    },
+    {
+        path:"devices/adddevice",
+        pathMatch:'full',
+        loadComponent: async()=>{
+            const m = await import('./components/add-device/add-device.component');
+            return m.AddDeviceComponent;
+        }
     }
 ];
