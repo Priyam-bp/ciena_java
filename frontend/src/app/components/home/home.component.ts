@@ -25,7 +25,7 @@ export class HomeComponent {
       button:"+ Add Shelf",
       iconLink:'bi bi-box-seam',
       color:"green",
-      path:'shelf/addshelf'
+      path:'/addshelf'
     },
     {
       id: 3,
@@ -34,7 +34,7 @@ export class HomeComponent {
       button:"+ Add Position",
       iconLink:'bi bi-grid',
       color:"purple",
-      path:'shelfposition/addshelfposition'
+      path:'/addshelfposition'
     }
   ])
 }

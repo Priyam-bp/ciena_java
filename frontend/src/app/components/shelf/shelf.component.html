@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<div style="padding: 0px 10px 0px 10px;">
     <h1>Shelf Positions</h1>
     @if (!shelfItems().length) {
       <p>Loading...</p>
@@ -16,7 +9,7 @@
           <tr>
             <th scope="col">Id</th>
             <th scope="col">name</th>
-            <th scope="col">Has Device</th>
+            <th scope="col">Shelf Type</th>
           </tr>
         </thead>
         <tbody>
@@ -25,14 +18,10 @@
                 <td>{{shelf.id}}</td>
                 <td>{{shelf.name}}</td>
                 <td>{{shelf.shelfType}}</td>
-                <div>
-                  <td><button type="button" class="btn btn-success">Add Shelf Position</button></td>
-                  <td><button type="button" class="btn btn-primary">Edit</button></td>
-                  <td><button type="button" class="btn btn-danger">🗑️</button></td>
-              </div>
+                <td><button type="button" class="btn btn-primary">Edit</button></td>
+                <td><button type="button" class="btn btn-danger">🗑️</button></td>
             </tr>
           }
         </tbody>
       </table>
-</body>
-</html>
+</div>

@@ -23,13 +23,11 @@ export class AddDeviceComponent implements OnInit{
       
   }
   saveDevice(): void{
-    debugger;
     console.log();
     
     this.deviceService.saveDevice(this.device).subscribe({
       next: (res: Device)=>{
         console.log(res);
-        // deviceForm.reset();
       },
       error: (err: HttpErrorResponse)=>{
         console.log(err);

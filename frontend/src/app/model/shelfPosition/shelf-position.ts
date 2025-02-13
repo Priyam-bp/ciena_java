@@ -1,7 +1,7 @@
 import { Device } from "../device/device";
 
 export type ShelfPosition  = {
-    id: number;
+    id?: number;
     name: String;
-    device: Device;
+    device?: Device;
 }
