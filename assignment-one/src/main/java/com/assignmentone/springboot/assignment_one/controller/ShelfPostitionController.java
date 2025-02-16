@@ -43,4 +43,8 @@ public class ShelfPostitionController {
         shelfPositionService.addShelfToShelfPosition(data.getShelfId(), data.getShelfPositionId());
     }
 
+    @GetMapping("/getavailableShelfPositions")
+    public List<ShelfPositionVO> getAvailableShelfPositions(){
+        return shelfPositionService.getAvailableShelfPositions();
+    }
 }

@@ -43,4 +43,8 @@ public class ShelfController {
         shelfService.deleteShelfById(id);
     }
 
+    @GetMapping("/getavailableshelves")
+    public List<ShelfVO> getAvailableShelves(){
+        return shelfService.getAvailableShelves();
+    }
 }

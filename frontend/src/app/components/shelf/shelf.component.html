@@ -4,7 +4,7 @@
       <p>Loading...</p>
     }
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Id</th>
@@ -18,8 +18,10 @@
                 <td>{{shelf.id}}</td>
                 <td>{{shelf.name}}</td>
                 <td>{{shelf.shelfType}}</td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
+                <div>
+                  <td><button type="button" class="btn btn-primary">Edit</button></td>
                 <td><button type="button" class="btn btn-danger">🗑️</button></td>
+                </div>
             </tr>
           }
         </tbody>

@@ -43,4 +43,7 @@ public class ShelfPositionService {
         shelfPositionRepository.save(shelfPosition);
     }
     
+    public List<ShelfPositionVO> getAvailableShelfPositions(){
+        return shelfPositionRepository.getAvailableShelfPositions();
+    }
 }

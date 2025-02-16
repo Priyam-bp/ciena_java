@@ -7,6 +7,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>Device type</th>
+            <th>Shelf Position</th>
         </tr>
     </thead>
     <tbody>
@@ -15,8 +16,12 @@
                 <td>{{device.id}}</td>
                 <td>{{device.name}}</td>
                 <td>{{device.deviceType}}</td>
+                <td>@for (shelfPosition of device.shelfPositions; track $index) {
+                    <span>{{shelfPosition.name}}, </span>    
+                }
+                </td>
                 <div>
-                    <td><button type="button" class="btn btn-success">Add Shelf Position</button></td>
+                    <td><button type="button" class="btn btn-success" (click)="onOpen(device.id!)">Add Shelf Position</button></td>
                     <td><button type="button" class="btn btn-primary">Edit</button></td>
                     <td><button type="button" class="btn btn-danger">🗑️</button></td>
                 </div>
@@ -25,3 +30,29 @@
     </tbody>
 </table>
 </div>
+<div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Shelf Position to Device</h5>
+                <button (click)="onClose()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Select a Shelf Position</p>
+                <ul>
+                    @for (position of availableShelfPositions(); track $index) {
+                        <li (click)="selectedShelfPositionId(position.id!)" [ngClass]="{'selectedItem': selectedShelfPosition === position.id}" class="shelfPosition" style="cursor: pointer; border: 1px solid grey; padding: 10px;">
+                            <div>{{position.name}}</div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="addShelfPositionToDevice()">Save changes</button>
+            </div>
+        </div>
+    </div>
