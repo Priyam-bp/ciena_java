@@ -40,8 +40,8 @@ public class ShelfController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteShelfById(@PathVariable long id){
-        shelfService.deleteShelfById(id);
+    public String deleteShelfById(@PathVariable long id){
+       return shelfService.deleteShelfById(id);
     }
 
     @GetMapping("/getavailableshelves")

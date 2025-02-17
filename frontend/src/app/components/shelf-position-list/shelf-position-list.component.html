@@ -18,8 +18,8 @@
                 <td>{{shelfPosition.shelf?.name === null ? "-" : shelfPosition.shelf?.name}}</td>
                 <div>
                   <td><button type="button" class="btn btn-success" (click)="onOpen(shelfPosition.id!)">Add Shelf</button></td>
-                  <td><button type="button" class="btn btn-primary" (click)="openDialog(shelfPosition.id!,shelfPosition.name)">Edit</button></td>
-                  <td><button type="button" class="btn btn-danger" (click)="openDelDialog(shelfPosition.id!,shelfPosition.name)">🗑️</button></td>
+                  <td><button type="button" class="btn btn-primary" (click)="openDialog(shelfPosition.id!,shelfPosition.name!)">Edit</button></td>
+                  <td><button type="button" class="btn btn-danger" (click)="openDelDialog(shelfPosition.id!,shelfPosition.name!)">🗑️</button></td>
                 </div>
             </tr>
           }

@@ -1,6 +1,6 @@
 export type Shelf = {
     id?: number,
-    name: string,
-    shelfType: string,
+    name: string | undefined,
+    shelfType: string | undefined,
     shelfPositionId?: number
 }

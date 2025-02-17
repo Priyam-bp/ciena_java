@@ -22,8 +22,8 @@
                 </td>
                 <div>
                     <td><button type="button" class="btn btn-success" (click)="onOpen(device.id!)">Add Shelf Position</button></td>
-                    <td><button type="button" class="btn btn-primary" (click)="openDialog(device.id!,device.name,device.deviceType)">Edit</button></td>
-                    <td><button type="button" class="btn btn-danger" (click)="openDelDialog(device.id!,device.name,device.deviceType)">🗑️</button></td>
+                    <td><button type="button" class="btn btn-primary" (click)="openDialog(device.id!,device.name!,device.deviceType!)">Edit</button></td>
+                    <td><button type="button" class="btn btn-danger" (click)="openDelDialog(device.id!,device.name!,device.deviceType!)">🗑️</button></td>
                 </div>
             </tr>
         }

@@ -4,11 +4,11 @@
       <form #deviceForm="ngForm" style="width: 50%; padding: 10px; border: 1px solid black; border-radius: 15px; margin-top: 20px;">
           <div class="mb-3">
             <label for="name" class="form-label">Device Name</label>
-            <input type="text" class="form-control" [(ngModel)]="device.name" name="name">
+            <input placeholder="Device Name" type="text" class="form-control" [(ngModel)]="device.name" name="name">
           </div>
           <div class="mb-3">
             <label for="devicetype" class="form-label">Device Type</label>
-            <input type="text" class="form-control" [(ngModel)]="device.deviceType" name="deviceType">
+            <input placeholder="Device Type" type="text" class="form-control" [(ngModel)]="device.deviceType" name="deviceType">
           </div>
           <div style="display: flex; justify-content: center;"><button type="submit" (click)="saveDevice()" class="btn btn-primary">Add Device</button></div>
         </form>

@@ -18,13 +18,13 @@ export class ShelfComponent implements OnInit{
   shelfItems = signal<Array<Shelf>>([]);
   editObj: Shelf = {
     id: undefined,
-    name:'',
-    shelfType:""
+    name:undefined,
+    shelfType:undefined
   }
   delObj: Shelf = {
     id: undefined,
-    name:'',
-    shelfType:""
+    name:undefined,
+    shelfType:undefined
   }
 
 
@@ -39,14 +39,19 @@ export class ShelfComponent implements OnInit{
   }
 
   submit = (id: number,data: Shelf)=>{
-    this.shelfService.updateShelf(id,data).subscribe({
-      next: (res: any)=>{
-        console.log(res);
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
+    try {
+      this.shelfService.updateShelf(id,data).subscribe({
+        next: (res: any)=>{
+          console.log(res);
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+        }
+      })
+    } catch (error) {
+      console.log(error);
+       
+    }
   }
 
   readonly delDialog = inject(MatDialog)
@@ -60,17 +65,25 @@ export class ShelfComponent implements OnInit{
   }
 
   delSubmit=(id:number)=>{
-    this.shelfService.deleteShelf(id).subscribe({
-      next: (res: any)=>{
-        console.log(res);
-        this.delDialog.closeAll()
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
+    try {
+      this.shelfService.deleteShelf(id).subscribe({
+        next: (res: any)=>{
+          console.log(res);
+          this.delDialog.closeAll()
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
   ngOnInit(): void {
+      this.callShelf();
+  }
+  callShelf(){
+    try {
       this.shelfService.getAllShelves()
       .pipe(catchError((err)=>{
         console.log(err);
@@ -79,5 +92,8 @@ export class ShelfComponent implements OnInit{
       .subscribe((shelf)=>{
         this.shelfItems.set(shelf);
       })
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

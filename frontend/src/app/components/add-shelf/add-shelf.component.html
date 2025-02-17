@@ -4,13 +4,13 @@
         <form #shelfForm="ngForm" style="width: 50%; padding: 10px; border: 1px solid black; border-radius: 15px; margin-top: 20px;">
             <div class="mb-3">
               <label for="name" class="form-label">Shelf Name</label>
-              <input type="text" class="form-control" [(ngModel)]="shelf.name" name="name">
+              <input placeholder="Shelf name" type="text" class="form-control" [(ngModel)]="shelf.name" name="name">
             </div>
             <div class="mb-3">
               <label for="shelfType" class="form-label">Shelf Type</label>
-              <input type="text" class="form-control" [(ngModel)]="shelf.shelfType" name="shelfType">
+              <input placeholder="Shelf Type" type="text" class="form-control" [(ngModel)]="shelf.shelfType" name="shelfType">
             </div>
-            <div style="display: flex; justify-content: center;"><button type="submit" (click)="saveShelf()" class="btn btn-primary">Add Device</button></div>
+            <div style="display: flex; justify-content: center;"><button type="submit" (click)="saveShelf()" class="btn btn-primary">Add Shelf</button></div>
           </form>
     </div>
   </div>

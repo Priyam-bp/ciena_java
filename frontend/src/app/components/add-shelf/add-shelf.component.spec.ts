@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddShelfComponent } from './add-shelf.component';
+import { ToastrModule } from 'ngx-toastr';
 
 describe('AddShelfComponent', () => {
   let component: AddShelfComponent;
@@ -8,7 +9,9 @@ describe('AddShelfComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddShelfComponent]
+      imports: [AddShelfComponent,ToastrModule.forRoot({
+        positionClass :'toast-bottom-right'
+      }) ]
     })
     .compileComponents();
 

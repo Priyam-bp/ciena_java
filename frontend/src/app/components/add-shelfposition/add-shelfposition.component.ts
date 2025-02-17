@@ -3,6 +3,8 @@ import { ShelfPosition } from '../../model/shelfPosition/shelf-position';
 import { FormsModule } from '@angular/forms';
 import { ShelfPositionService } from '../../services/shelfPositionService/shelf-position-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-shelfposition',
@@ -12,20 +14,32 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class AddShelfpositionComponent {
   shelfPositionService = inject(ShelfPositionService);
+  toast = inject(ToastrService);
+  router = inject(Router)
 
   shelfPosition: ShelfPosition = {
-    name: '',
+    name: undefined,
   }
 
-  saveShelf(){
-    this.shelfPositionService.saveShelfPosition(this.shelfPosition).subscribe({
-      next: (res: ShelfPosition)=>{
-        console.log(this.shelfPosition);
-        this.shelfPosition.name = "";
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
+  saveShelfPosition(){
+    try {
+      if(this.shelfPosition.name == undefined){
+        this.toast.error("Please add Shelf Position Details");
+        return;
       }
-    })
+      this.shelfPositionService.saveShelfPosition(this.shelfPosition).subscribe({
+        next: (res: ShelfPosition)=>{
+          console.log(this.shelfPosition);
+          this.shelfPosition.name = "";
+          this.toast.success("Shelf Position added successfully")
+          this.router.navigate(['/shelfPositions'])
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

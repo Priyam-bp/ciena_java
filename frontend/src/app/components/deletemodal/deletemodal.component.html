@@ -3,9 +3,14 @@
     <mat-dialog-content>Are you sure you want to delete this {{data.title}}:
         <ul>
             <li>Id: {{data.delObj.id}}</li>
-            <li>Device Name: {{data.delObj.name}}</li>
-            <li>Device Type: {{data.delObj.deviceType}}</li>
+            <li>Name: {{data.delObj.name}}</li>
+            @if (data.delObj.deviceType != undefined) {
+                <li>Device Type: {{data.delObj.deviceType}}</li>
+            }
+            @else if(data.delObj.shelfType != undefined){
+                <li>Shelf Type: {{data.delObj.shelfType}}</li>
+            }
         </ul>
     </mat-dialog-content>
-    <button (click)="data.submit(data.delObj.id)">Delete {{data.title}}</button>
+    <button mat-stroked-button (click)="data.submit(data.delObj.id)">Delete {{data.title}}</button>
 </mat-dialog-content>

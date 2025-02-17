@@ -30,6 +30,6 @@ export class DeviceService {
   }
 
   deleteDevice(id:number){
-    return this.http.delete(`${this.url}/devices/${id}`);
+    return this.http.delete(`${this.url}/devices/${id}`,{responseType:'text'});
   }
 }
