@@ -1,6 +1,6 @@
 export type Shelf = {
     id?: number,
-    name: String,
-    shelfType: String,
-    shelfPositionId: number
+    name: string,
+    shelfType: string,
+    shelfPositionId?: number
 }

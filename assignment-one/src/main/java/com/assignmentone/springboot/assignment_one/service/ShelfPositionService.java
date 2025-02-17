@@ -46,4 +46,18 @@ public class ShelfPositionService {
     public List<ShelfPositionVO> getAvailableShelfPositions(){
         return shelfPositionRepository.getAvailableShelfPositions();
     }
+
+    public ShelfPositionVO editShelfPosition(long id,ShelfPositionVO shelfPosition){
+        ShelfPositionVO checkShelfPosition = shelfPositionRepository.findById(id).orElseThrow(()->new RuntimeException("Shelf Position not Found"));
+        checkShelfPosition.setName(shelfPosition.getName());
+        return shelfPositionRepository.save(checkShelfPosition);
+    }
+
+    public String deleteShelfPosition(long id){
+        if(!shelfPositionRepository.existsById(id)){
+            throw new RuntimeException("Shelf Position not found");
+        }
+        shelfPositionRepository.deleteById(id);
+        return "Shelf Position deleted of id:" + id;
+    }
 }

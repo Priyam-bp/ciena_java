@@ -1,0 +1,17 @@
+<mat-dialog-content style="display: flex; flex-direction: column; gap: 5px;">
+    <h4>Edit {{ data?.title }}: {{ data?.editObj?.name }}</h4>
+    <mat-form-field>
+      <mat-label>{{ data?.firstInput }}</mat-label>
+      <input matInput [(ngModel)]="data.editObj.name" />
+    </mat-form-field>
+    @if (data.secondInput) {
+        <mat-form-field>
+            <mat-label>{{ data?.secondInput }}</mat-label>
+            <input matInput [(ngModel)]="data.editObj.deviceType" *ngIf="data.editObj.deviceType !== undefined; else shelfTypeInput" />
+            <ng-template #shelfTypeInput>
+                <input matInput [(ngModel)]="data.editObj.shelfType" />
+            </ng-template>
+          </mat-form-field>
+    }
+    <button (click)="data.submit(data.editObj.id,data.editObj)">Make Changes</button>
+  </mat-dialog-content>

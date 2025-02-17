@@ -22,4 +22,12 @@ export class ShelfService {
   getAvailableShelves(){
     return this.http.get<Array<Shelf>>(`${this.url}/shelf/getavailableshelves`)
   }
+
+  updateShelf(id: number,data: Shelf){
+    return this.http.put(`${this.url}/shelf/${id}`,data);
+  }
+
+  deleteShelf(id:number){
+    return this.http.delete(`${this.url}/shelf/${id}`)
+  }
 }

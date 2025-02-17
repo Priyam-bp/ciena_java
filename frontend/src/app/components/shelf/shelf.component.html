@@ -1,8 +1,5 @@
 <div style="padding: 0px 10px 0px 10px;">
     <h1>Shelf Positions</h1>
-    @if (!shelfItems().length) {
-      <p>Loading...</p>
-    }
 
     <table class="table table-striped">
         <thead>
@@ -19,8 +16,8 @@
                 <td>{{shelf.name}}</td>
                 <td>{{shelf.shelfType}}</td>
                 <div>
-                  <td><button type="button" class="btn btn-primary">Edit</button></td>
-                <td><button type="button" class="btn btn-danger">🗑️</button></td>
+                  <td><button type="button" class="btn btn-primary" (click)="openDialog(shelf.id!,shelf.name,shelf.shelfType)">Edit</button></td>
+                <td><button type="button" class="btn btn-danger" (click)="delOpenDialog(shelf.id!, shelf.name, shelf.shelfType)">🗑️</button></td>
                 </div>
             </tr>
           }

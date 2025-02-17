@@ -3,7 +3,7 @@ import { Shelf } from "../shelf/shelf";
 
 export type ShelfPosition  = {
     id?: number;
-    name: String;
+    name: string;
     device?: Device;
     shelf?: Shelf
 }

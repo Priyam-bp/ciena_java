@@ -33,4 +33,10 @@ public class ShelfService {
     public List<ShelfVO> getAvailableShelves(){
         return shelfRepository.getAvailableShelves();
     }
+
+    public ShelfVO updateShelf(long id, ShelfVO shelf){
+        ShelfVO checkShelf = shelfRepository.findById(id).orElseThrow(()-> new RuntimeException("Shelf Not Found"));
+        checkShelf.setName(shelf.getName());
+        return shelfRepository.save(checkShelf);
+    }
 }

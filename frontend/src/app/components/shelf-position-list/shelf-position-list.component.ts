@@ -8,6 +8,9 @@ import { ShelfService } from '../../services/shelfService/shelf-service.service'
 import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Addshelftoshelfposition } from '../../model/addShelfToShelfPosition/addshelftoshelfposition';
+import { MatDialog } from '@angular/material/dialog';
+import { EditComponentComponent } from '../edit-component/edit-component.component';
+import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
 
 @Component({
   selector: 'app-shelf-position-list',
@@ -24,6 +27,34 @@ export class ShelfPositionListComponent implements OnInit {
   selectedShelfId: number| null = null;
   availableShelves = signal<Array<Shelf>>([]); 
   shelfService = inject(ShelfService);
+  editObj: any ={
+    id: undefined,
+    name:'',
+  }
+  delObj: any ={
+    id: undefined,
+    name:'',
+  }
+  constructor(private dialog: MatDialog){}
+
+  openDialog(id: number,name: string): void{
+    this.editObj= {id ,name};
+    this.dialog.open(EditComponentComponent,{
+      data:{title: "Shelf Position", firstInput: "Edit Shelf Position Name",editObj : this.editObj,submit: this.submit.bind(this)}
+    })
+  }
+
+  submit = (id: number, shelfPosition: ShelfPosition)=>{
+    console.log("submit called");
+    this.shelfPositionService.editShelfPosition(id,shelfPosition).subscribe({
+      next: (res: any)=>{
+        console.log(res);
+      },
+      error: (err: HttpErrorResponse)=>{
+        console.log(err);
+      }
+    })
+  }
   
 
   ngOnInit(): void {
@@ -100,6 +131,29 @@ export class ShelfPositionListComponent implements OnInit {
     this.shelfPositionService.addShelftoShelfPosition(data).subscribe({
       next: (res: any)=>{
         console.log(res,"Added");
+      },
+      error: (err: HttpErrorResponse)=>{
+        console.log(err);
+      }
+    })
+  }
+
+  readonly delDialog = inject(MatDialog)
+
+  openDelDialog(id:number,name: string){
+    this.delObj = {id,name};
+
+    this.delDialog.open(DeletemodalComponent,{
+      data:{title:"Shelf Position",delObj: this.delObj,submit: this.delSubmit.bind(this)}
+    })
+  }
+
+  delSubmit=(id:number)=>{
+    console.log(id);
+
+    this.shelfPositionService.deleteShelf(id).subscribe({
+      next: (res: any)=>{
+        console.log(res);
       },
       error: (err: HttpErrorResponse)=>{
         console.log(err);

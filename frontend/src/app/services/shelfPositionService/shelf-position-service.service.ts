@@ -26,4 +26,12 @@ export class ShelfPositionService {
   addShelftoShelfPosition(data: Addshelftoshelfposition){
     return this.http.post(`${this.url}/shelfposition/addShelfToShelfPosition`,data);
   }
+
+  editShelfPosition(id: number,data: ShelfPosition){
+    return this.http.put(`${this.url}/shelfposition/${id}`,data)
+  }
+
+  deleteShelf(id:number){
+    return this.http.delete(`${this.url}/shelfposition/${id}`)
+  }
 }

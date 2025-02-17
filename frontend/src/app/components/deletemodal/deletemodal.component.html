@@ -1,0 +1,11 @@
+<mat-dialog-content>
+    <h2 mat-dialog-title>Delete: {{data.title}}</h2>
+    <mat-dialog-content>Are you sure you want to delete this {{data.title}}:
+        <ul>
+            <li>Id: {{data.delObj.id}}</li>
+            <li>Device Name: {{data.delObj.name}}</li>
+            <li>Device Type: {{data.delObj.deviceType}}</li>
+        </ul>
+    </mat-dialog-content>
+    <button (click)="data.submit(data.delObj.id)">Delete {{data.title}}</button>
+</mat-dialog-content>

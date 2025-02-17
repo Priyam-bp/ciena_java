@@ -24,4 +24,12 @@ export class DeviceService {
   addShelfPositionToDevice(addshelfpositionrequest: Addshelfpositionrequest){
     return this.http.post<Addshelfpositionrequest>(`${this.url}/devices/addShelfPositionToDevice`, addshelfpositionrequest);
   }
+
+  editDevice(id: number,deviceData : Device){
+    return this.http.put(`${this.url}/devices/${id}`,deviceData)
+  }
+
+  deleteDevice(id:number){
+    return this.http.delete(`${this.url}/devices/${id}`);
+  }
 }
