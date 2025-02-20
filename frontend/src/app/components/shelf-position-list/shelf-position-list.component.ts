@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ShelfPositionService } from '../../services/shelfPositionService/shelf-position-service.service';
 import { ShelfPosition } from '../../model/shelfPosition/shelf-position';
 import { catchError, of } from 'rxjs';
@@ -11,10 +11,12 @@ import { Addshelftoshelfposition } from '../../model/addShelfToShelfPosition/add
 import { MatDialog } from '@angular/material/dialog';
 import { EditComponentComponent } from '../edit-component/edit-component.component';
 import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-shelf-position-list',
-  imports: [CommonModule],
+  imports: [CommonModule,MatFormFieldModule, MatInputModule],
   standalone: true,
   templateUrl: './shelf-position-list.component.html',
   styleUrl: './shelf-position-list.component.css'
@@ -159,5 +161,22 @@ export class ShelfPositionListComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  filterText = signal('');
+
+  filteredShelfPositions = computed(()=>{
+    const filter = this.filterText().trim().toLowerCase();
+    
+    if(!filter){
+      return this.shelfPositionItems();
+    }
+
+    return this.shelfPositionItems().filter(shelfPosition => shelfPosition.name?.toLowerCase().includes(filter))
+  })
+
+  applyFilter(event: Event){
+    const input = event.target as HTMLInputElement;
+    this.filterText.set(input.value)
   }
 }

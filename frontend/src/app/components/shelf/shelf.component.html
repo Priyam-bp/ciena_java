@@ -1,5 +1,11 @@
 <div style="padding: 0px 10px 0px 10px;">
-    <h1>Shelf Positions</h1>
+    <div style="display: flex; justify-content: space-between;">
+      <h1>Shelf Positions</h1>
+      <mat-form-field>
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+      </mat-form-field>
+    </div>
 
     <table class="table table-striped">
         <thead>
@@ -10,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          @for (shelf of shelfItems(); track $index) {
+          @for (shelf of filteredShelves(); track $index) {
             <tr>
                 <td>{{shelf.id}}</td>
                 <td>{{shelf.name}}</td>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import * as bootstap from 'bootstrap';
 import { Device } from '../../model/device/device';
@@ -92,12 +92,13 @@ export class DeviceListComponent implements OnInit {
         const mod = bootstap.Modal.getInstance(modal);
         mod?.hide()
       }
+      this.selectedShelfPosition = null;
     }
   }
 
   getAvailableShelfPositions(){
     try {
-      this.shelfPositionService.getAvailableShelfPositions().subscribe({
+      this.shelfPositionService.getAllShelfPositions().subscribe({
         next: (res: Array<ShelfPosition>)=>{
           this.availableShelfPositions.set(res);
         },
@@ -113,9 +114,6 @@ export class DeviceListComponent implements OnInit {
   selectedShelfPositionId(id:number){
     if(this.selectedShelfPosition === null){
       this.selectedShelfPosition = id;
-    }
-    else{
-      this.selectedShelfPosition = null;
     }
   }
 
@@ -215,5 +213,20 @@ export class DeviceListComponent implements OnInit {
       console.log(error);
        
     }
+  }
+
+  filterText = signal('');
+
+  filteredDevices = computed(()=>{
+    const filter = this.filterText().trim().toLowerCase();
+    if(!filter){
+      return this.deviceItems();
+    }
+    return this.deviceItems().filter(device => device.name?.toLowerCase().includes(filter));
+  })
+
+  applyFilter(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.filterText.set(input.value)
   }
 }

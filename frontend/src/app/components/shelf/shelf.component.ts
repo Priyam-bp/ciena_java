@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ShelfService } from '../../services/shelfService/shelf-service.service';
 import { Shelf } from '../../model/shelf/shelf';
 import { catchError, of } from 'rxjs';
@@ -6,10 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditComponentComponent } from '../edit-component/edit-component.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-shelf',
-  imports: [],
+  imports: [MatFormFieldModule, MatInputModule],
   templateUrl: './shelf.component.html',
   styleUrl: './shelf.component.css'
 })
@@ -95,5 +97,20 @@ export class ShelfComponent implements OnInit{
     } catch (error) {
       console.log(error);
     }
+  }
+
+  filterText = signal('');
+
+  filteredShelves = computed(()=>{
+    const filter = this.filterText().trim().toLowerCase();
+    if(!filter){
+      return this.shelfItems();
+    }
+    return this.shelfItems().filter(shelf => shelf.name?.toLowerCase().includes(filter));
+  })
+
+  applyFilter(event: Event){
+    const filter = event.target as HTMLInputElement;
+    this.filterText.set(filter.value);
   }
 }
