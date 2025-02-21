@@ -2,6 +2,8 @@ package com.assignmentone.springboot.assignment_one.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.assignmentone.springboot.assignment_one.model.Device;
 
 public interface InventoryService {
@@ -9,6 +11,6 @@ public interface InventoryService {
     Device getDevice(Long id);
     String deleteDevice(Long id);
     Device updateDevice(Long id,Device device);
-    void addShelfPositionToDevice(Long deviceId,Long shelfPositionId);
+    ResponseEntity<String> addShelfPositionToDevice(Long deviceId,Long shelfPositionId);
     List<Device> getAllDevices();
 }

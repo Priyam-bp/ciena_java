@@ -28,6 +28,6 @@ export class ShelfService {
   }
 
   deleteShelf(id:number){
-    return this.http.delete(`${this.url}/shelf/${id}`)
+    return this.http.delete(`${this.url}/shelf/${id}`,{responseType:"text"})
   }
 }

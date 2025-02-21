@@ -32,6 +32,6 @@ export class ShelfPositionService {
   }
 
   deleteShelf(id:number){
-    return this.http.delete(`${this.url}/shelfposition/${id}`)
+    return this.http.delete(`${this.url}/shelfposition/${id}`,{responseType: 'text'})
   }
 }

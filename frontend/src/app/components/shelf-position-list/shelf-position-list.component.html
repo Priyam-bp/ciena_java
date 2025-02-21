@@ -3,7 +3,7 @@
     <h1>Shelf Positions</h1>
       <mat-form-field>
           <mat-label>Filter</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Device 1" #input>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Shelf Position 1" #input>
       </mat-form-field>
   </div>
     <table class="table table-striped">
@@ -35,21 +35,29 @@
     <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <div class="modal-header" style="display: flex; flex-direction: row; justify-content: space-between;">
+            <h5 class="modal-title" id="exampleModalLabel">Add Shelf</h5>
             <button type="button" (click)="onClose()" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <p>Select a Shelf Position</p>
-                <ul>
+            <p>Select a Shelf</p>
+                <div>
+                  @if (availableShelves().length == 0) {
+                    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                      <p>No shelf available</p>
+                      <button mat-stroked-button (click)="toAddShelf()">Add Shelf</button>
+                    </div>
+                  }
+                  @else {
                     @for (shelf of availableShelves(); track $index) {
-                        <li (click)="selectedShelfIdUpdate(shelf.id!)" class="shelfPosition" [ngClass]="{'availableShelves': selectedShelfId === shelf.id}" style="cursor: pointer; border: 1px solid grey; padding: 10px;">
+                        <div (click)="selectedShelfIdUpdate(shelf.id!)" class="shelfPosition" [ngClass]="{'availableShelves': selectedShelfId === shelf.id}" style="cursor: pointer; border: 1px solid grey; padding: 10px; border-radius: 7px; margin-bottom: 5px;">
                             <div>{{shelf.name}}</div>
-                        </li>
+                        </div>
                     }
-                </ul>
+                  }
+                </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose()">Close</button>

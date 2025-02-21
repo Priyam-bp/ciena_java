@@ -112,9 +112,7 @@ export class DeviceListComponent implements OnInit {
   }
 
   selectedShelfPositionId(id:number){
-    if(this.selectedShelfPosition === null){
-      this.selectedShelfPosition = id;
-    }
+    this.selectedShelfPosition = this.selectedShelfPosition === id ? null : id;
   }
 
   addShelfPositionToDevice(){
@@ -134,9 +132,12 @@ export class DeviceListComponent implements OnInit {
       this.deviceService.addShelfPositionToDevice(data).subscribe({
         next: (res: any)=>{
           console.log(res);
+          this.toast.success("Relationship added")
+          this.callDevice();
+          this.onClose()
         },
         error: (err: HttpErrorResponse)=>{
-          console.log(err);
+          this.toast.error(err.error.message)
         }
       })
     } catch (error) {
@@ -170,7 +171,7 @@ export class DeviceListComponent implements OnInit {
           this.dialog.closeAll()
         },
         error: (err: HttpErrorResponse) => {
-          console.log(err);
+          this.toast.error("Unable to edit, try again")
         }
       });
     } catch (error) {
@@ -195,6 +196,7 @@ export class DeviceListComponent implements OnInit {
     try {
       if(id == undefined){
         this.toast.error("Undefined Device")
+        return;
       }
       console.log(id);
     
@@ -206,7 +208,7 @@ export class DeviceListComponent implements OnInit {
           this.delDialog.closeAll();
         },
         error: (err: HttpErrorResponse)=>{
-          console.log(err);
+          this.toast.error("Unable to delete, Try again")
         }
       })
     } catch (error) {

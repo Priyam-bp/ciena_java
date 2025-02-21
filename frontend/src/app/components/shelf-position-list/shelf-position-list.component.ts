@@ -13,10 +13,13 @@ import { EditComponentComponent } from '../edit-component/edit-component.compone
 import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Toast, ToastrService } from 'ngx-toastr';
+import { MatButton } from '@angular/material/button';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-shelf-position-list',
-  imports: [CommonModule,MatFormFieldModule, MatInputModule],
+  imports: [CommonModule,MatFormFieldModule, MatInputModule,MatButton,RouterLink],
   standalone: true,
   templateUrl: './shelf-position-list.component.html',
   styleUrl: './shelf-position-list.component.css'
@@ -29,6 +32,8 @@ export class ShelfPositionListComponent implements OnInit {
   selectedShelfId: number| null = null;
   availableShelves = signal<Array<Shelf>>([]); 
   shelfService = inject(ShelfService);
+  toast = inject(ToastrService);
+  router = inject(Router)
   editObj: any ={
     id: undefined,
     name:'',
@@ -37,41 +42,30 @@ export class ShelfPositionListComponent implements OnInit {
     id: undefined,
     name:'',
   }
-  constructor(private dialog: MatDialog){}
 
-  openDialog(id: number,name: string): void{
-    this.editObj= {id ,name};
-    this.dialog.open(EditComponentComponent,{
-      data:{title: "Shelf Position", firstInput: "Edit Shelf Position Name",editObj : this.editObj,submit: this.submit.bind(this)}
-    })
-  }
-
-  submit = (id: number, shelfPosition: ShelfPosition)=>{
-    console.log("submit called");
-    this.shelfPositionService.editShelfPosition(id,shelfPosition).subscribe({
-      next: (res: any)=>{
-        console.log(res);
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
-  }
-  
 
   ngOnInit(): void {
-      this.shelfPositionService.getAllShelfPositions()
-        .pipe(
-          catchError((err)=>{
-            console.log(err);
-            return of([]);
-          })
-        )
-        .subscribe((shelfPositions)=>{
-          this.shelfPositionItems.set(shelfPositions);
-          
-        })
+    this.callShelfPositions()
   }
+
+  callShelfPositions(){
+    try {
+      this.shelfPositionService.getAllShelfPositions()
+      .pipe(
+        catchError((err)=>{
+          console.log(err);
+          return of([]);
+        })
+      )
+      .subscribe((shelfPositions)=>{
+        this.shelfPositionItems.set(shelfPositions);
+        
+      })
+    } catch (error) {
+      this.toast.error("Unable to fetch Shelf Positions")
+    }
+  }
+
   onOpen(id: number){
     this.selectedShelfPositionId = id;
     console.log(id);
@@ -98,48 +92,87 @@ export class ShelfPositionListComponent implements OnInit {
   }
 
   getAvailableShelves(){
-    this.shelfService.getAvailableShelves().subscribe({
-      next: (res: Array<Shelf>)=>{
-        this.availableShelves.set(res);
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
+    try {
+      this.shelfService.getAvailableShelves().subscribe({
+        next: (res: Array<Shelf>)=>{
+          this.availableShelves.set(res);
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+        }
+      })
+    } catch (error) {
+      this.toast.error("Unable to fetch shelves")
+    }
   }
 
   selectedShelfIdUpdate(id: number){
-    if(this.selectedShelfId === null){
-      this.selectedShelfId = id;
-    }
-    else{
-      this.selectedShelfId = null;
-    }
+    this.selectedShelfId = this.selectedShelfId === id ? null : id;
   }
 
   addShelfToShelfPosition(){
-    if(this.selectedShelfId == null || this.selectedShelfPositionId == null){
-      alert('Please select both a Shelf Position and a Shelf');
-      return;
-    }
-
-    const data: Addshelftoshelfposition ={
-      shelfId : this.selectedShelfId,
-      shelfPositionId: this.selectedShelfPositionId
-    }
-
-    console.log(data);
-    
-    this.shelfPositionService.addShelftoShelfPosition(data).subscribe({
-      next: (res: any)=>{
-        console.log(res,"Added");
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
+    try {
+      if(this.selectedShelfId == null || this.selectedShelfPositionId == null){
+        this.toast.error('Please select both a Shelf Position and a Shelf');
+        return;
       }
+  
+      const data: Addshelftoshelfposition ={
+        shelfId : this.selectedShelfId,
+        shelfPositionId: this.selectedShelfPositionId
+      }
+  
+      console.log(data);
+      
+      this.shelfPositionService.addShelftoShelfPosition(data).subscribe({
+        next: (res: any)=>{
+          console.log(res,"Added");
+          this.toast.success("Relationship added");
+          this.callShelfPositions();
+          this.onClose();
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+          this.toast.error(err.error.message)
+        }
+      })
+    } catch (error) {
+      this.toast.error("Unable to establish relationship")
+    }
+  }
+  
+  //edit
+  constructor(private dialog: MatDialog){}
+
+  openDialog(id: number,name: string): void{
+    this.editObj= {id ,name};
+    this.dialog.open(EditComponentComponent,{
+      data:{title: "Shelf Position", firstInput: "Edit Shelf Position Name",editObj : this.editObj,submit: this.submit.bind(this)}
     })
   }
 
+  submit = (id: number, shelfPosition: ShelfPosition)=>{
+    try {
+      console.log("submit called");
+      this.shelfPositionService.editShelfPosition(id,shelfPosition).subscribe({
+        next: (res: any)=>{
+          console.log(res);
+          this.toast.success("Shelf Position Updated")
+          this.callShelfPositions();
+          this.dialog.closeAll();
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+          this.toast.error(err.error.message)
+        }
+      })
+    } catch (error) {
+      this.toast.error("Unable to edit, try again")
+    }
+  }
+
+
+  //Delete Modal
   readonly delDialog = inject(MatDialog)
 
   openDelDialog(id:number,name: string){
@@ -151,17 +184,26 @@ export class ShelfPositionListComponent implements OnInit {
   }
 
   delSubmit=(id:number)=>{
-    console.log(id);
+    try {
+      console.log(id);
 
-    this.shelfPositionService.deleteShelf(id).subscribe({
-      next: (res: any)=>{
-        console.log(res);
-      },
-      error: (err: HttpErrorResponse)=>{
-        console.log(err);
-      }
-    })
+      this.shelfPositionService.deleteShelf(id).subscribe({
+        next: (res: any)=>{
+          console.log(res);
+          this.toast.success("Deleted Succesfully")
+          this.callShelfPositions();
+          this.delDialog.closeAll()
+        },
+        error: (err: HttpErrorResponse)=>{
+          console.log(err);
+        }
+      })
+    } catch (error) {
+      this.toast.error("Unable to delete")
+    }
   }
+
+  // Filter Logic
 
   filterText = signal('');
 
@@ -178,5 +220,10 @@ export class ShelfPositionListComponent implements OnInit {
   applyFilter(event: Event){
     const input = event.target as HTMLInputElement;
     this.filterText.set(input.value)
+  }
+
+  toAddShelf(){
+    this.onClose()
+    this.router.navigate(['/addshelf'])
   }
 }
