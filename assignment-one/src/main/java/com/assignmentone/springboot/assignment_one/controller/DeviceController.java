@@ -9,7 +9,7 @@ import com.assignmentone.springboot.assignment_one.service.InventoryService;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/devices") // Base URL for all endpoints
+@RequestMapping("/devices") 
 public class DeviceController {
 
     @Autowired

@@ -26,7 +26,7 @@ public class ShelfPositionService {
         try {
             return shelfPositionRepository.save(shelfPosition);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to fetch Shelf Positions",e);
+            throw new RuntimeException("Unable to save Shelf Positions",e);
         }
     }
 
@@ -56,7 +56,7 @@ public class ShelfPositionService {
 
             return ResponseEntity.ok("Relationship established succesfully");
         } catch (Exception e) {
-            throw new RuntimeException("Unable to establish relationship",e);
+            throw new RuntimeException(e.getMessage());
         }
     }
     
@@ -80,10 +80,10 @@ public class ShelfPositionService {
     }
 
     public String deleteShelfPosition(long id){
+        if(!shelfPositionRepository.existsById(id)){
+            throw new RuntimeException("Shelf Position not found");
+        }
         try {
-            if(!shelfPositionRepository.existsById(id)){
-                throw new RuntimeException("Shelf Position not found");
-            }
             shelfPositionRepository.deleteById(id);
             return "Shelf Position deleted of id:" + id;
         } catch (Exception e) {

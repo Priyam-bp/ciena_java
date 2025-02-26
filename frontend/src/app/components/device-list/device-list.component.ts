@@ -50,18 +50,14 @@ export class DeviceListComponent implements OnInit {
   
   callDevice(){
     try {
-      this.deviceService.getAllDevices()
-      .pipe(
-        catchError((err) => {
-          console.log("Error fetching devices:", err);
-          return of([]); 
-        })
-      )
-      .subscribe((devices) => {
-        this.deviceItems.set(devices);
-        console.log(devices);
-        
-      });
+      this.deviceService.getAllDevices().subscribe({
+        next: (devices: Array<Device>)=>{
+          this.deviceItems.set(devices);
+        },
+        error: (err: HttpErrorResponse)=>{
+          this.toast.error("Unable to fetch ")
+        }
+      })
     } catch (error) {
       console.log(error);
     }
@@ -90,9 +86,9 @@ export class DeviceListComponent implements OnInit {
       const modal = document.getElementById('exampleModalLong');
       if(modal){
         const mod = bootstap.Modal.getInstance(modal);
+        this.selectedShelfPosition = null;
         mod?.hide()
       }
-      this.selectedShelfPosition = null;
     }
   }
 

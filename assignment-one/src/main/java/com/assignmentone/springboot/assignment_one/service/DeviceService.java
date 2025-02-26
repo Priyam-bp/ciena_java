@@ -34,31 +34,23 @@ public class DeviceService implements InventoryService{
 
     @Override
     public Device getDevice(Long id) {
-        try {
-            return deviceRepository.findById(id).orElseThrow(()->new RuntimeException("Device not found"));
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to fetch device",e);
-        }
+        return deviceRepository.findById(id).orElseThrow(()->new RuntimeException("Device not found"));
     }
 
     @Override
     public String deleteDevice(Long id){
-        try {
-            if(!deviceRepository.existsById(id)){
-                throw new RuntimeException("Device not found");
-            }
-            deviceRepository.deleteById(id);
-            return "Device deleted of id:" + id;
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to delete device",e);
+        if(!deviceRepository.existsById(id)){
+            throw new RuntimeException("Device not found");
         }
+        deviceRepository.deleteById(id);
+        return "Device deleted of id:" + id;
     }
 
     @Override
     @Transactional
     public Device updateDevice(Long id, Device device){
+        Device checkDevice = deviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Device not found"));
         try {
-            Device checkDevice = deviceRepository.findById(id).orElseThrow(() -> new RuntimeException("Device not found"));
             checkDevice.setName(device.getName());
             checkDevice.setDeviceType(device.getDeviceType());
             return deviceRepository.save(checkDevice);
@@ -100,7 +92,6 @@ public class DeviceService implements InventoryService{
 
             return ResponseEntity.ok("Relationship Established");
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
     }

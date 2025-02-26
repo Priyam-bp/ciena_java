@@ -19,7 +19,7 @@ import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-shelf-position-list',
-  imports: [CommonModule,MatFormFieldModule, MatInputModule,MatButton,RouterLink],
+  imports: [CommonModule,MatFormFieldModule, MatInputModule,MatButton],
   standalone: true,
   templateUrl: './shelf-position-list.component.html',
   styleUrl: './shelf-position-list.component.css'

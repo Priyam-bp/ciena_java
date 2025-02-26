@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  cardItems = signal([
+  cardItems = [
     {
       id: 1,
       name: "Device",
@@ -36,5 +36,5 @@ export class HomeComponent {
       color:"purple",
       path:'/addshelfposition'
     }
-  ])
+  ]
 }

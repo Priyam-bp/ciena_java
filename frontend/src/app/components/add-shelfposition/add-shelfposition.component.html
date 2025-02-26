@@ -3,8 +3,8 @@
         <h2>Add Shelf Position to Inventory</h2>
         <form #shelfForm="ngForm" style="width: 50%; padding: 10px; border: 1px solid black; border-radius: 15px; margin-top: 20px;">
             <div class="mb-3">
-              <label for="name" class="form-label">Shelf Position</label>
-              <input type="text" class="form-control" [(ngModel)]="shelfPosition.name" name="name">
+              <label for="name" class="form-label">Shelf Position Name</label>
+              <input placeholder="Name" type="text" class="form-control" [(ngModel)]="shelfPosition.name" name="name">
             </div>
             <div style="display: flex; justify-content: center;"><button type="submit" (click)="saveShelfPosition()" class="btn btn-primary">Add Shelf Position</button></div>
           </form>

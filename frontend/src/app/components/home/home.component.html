@@ -2,7 +2,7 @@
   <div class="headingText text-center">Welcome to Inventory System</div>
 </div>
 <div class="cards">
-  @for (cardData of cardItems(); track $index) {
+  @for (cardData of cardItems; track $index) {
   <div class="card">
     <h3>{{ cardData.name }}</h3>
     <p>{{ cardData.subHeading }}</p>

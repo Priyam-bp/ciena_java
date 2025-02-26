@@ -18,8 +18,7 @@ public class Device {
     private String name;
     private String deviceType;
 
-    public Device() {
-    }
+    public Device() {}
 
     public Device(Long id, String name, String deviceType) {
         this.id = id;
