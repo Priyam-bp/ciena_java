@@ -17,11 +17,12 @@ public class Device {
 
     private String name;
     private String deviceType;
+    private Boolean active = true; // true: active , false: deleted
 
-    public Device() {}
+    public Device() {
+    }
 
-    public Device(Long id, String name, String deviceType) {
-        this.id = id;
+    public Device(Long deviceId, String name, String deviceType) {
         this.name = name;
         this.deviceType = deviceType;
     }
@@ -32,6 +33,7 @@ public class Device {
     private Set<ShelfPositionVO> shelfPositions = new HashSet<>();
 
     // Getter functions  
+
     public long getId() {
         return id;
     }
@@ -48,6 +50,10 @@ public class Device {
         return shelfPositions;
     }
 
+    public boolean getActive(){
+        return active;
+    }
+
     // Setter functions
     public void setName(String name) {
         this.name = name;
@@ -59,6 +65,10 @@ public class Device {
 
     public void setShelfPositions(Set<ShelfPositionVO> shelfPositions) {
         this.shelfPositions = shelfPositions;
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
     }
 
     @Override

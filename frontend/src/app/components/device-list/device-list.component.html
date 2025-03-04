@@ -48,13 +48,21 @@
             </div>
             <div class="modal-body">
                 <p>Select a Shelf Position</p>
-                <div>
-                    @for (position of availableShelfPositions(); track $index) {
-                        <div  (click)="selectedShelfPositionId(position.id!)" [ngClass]="{'selectedItem': selectedShelfPosition === position.id}" class="shelfPosition" style="cursor: pointer; border: 1px solid grey; padding: 10px; border-radius: 7px; margin-bottom: 5px;">
-                            <div>{{position.name}}</div>
-                        </div>
-                    }
-                </div>
+                @if (availableShelfPositions() == null || availableShelfPositions().length == 0) {
+                    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                        <p>No shelf positions available</p>
+                        <button mat-stroked-button (click)="toAddShelfPosition()">Add Shelf Position</button>
+                    </div>
+                }
+                @else {
+                    <div>
+                        @for (position of availableShelfPositions(); track $index) {
+                            <div  (click)="selectedShelfPositionId(position.id!)" [ngClass]="{'selectedItem': selectedShelfPosition === position.id}" class="shelfPosition" style="cursor: pointer; border: 1px solid grey; padding: 10px; border-radius: 7px; margin-bottom: 5px;">
+                                <div>{{position.name}}</div>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose()">Close</button>

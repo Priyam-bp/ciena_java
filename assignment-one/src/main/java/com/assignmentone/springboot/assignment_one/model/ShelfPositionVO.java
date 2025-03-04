@@ -13,11 +13,17 @@ public class ShelfPositionVO {
     @GeneratedValue
     private Long id;
     private String name;
+    private Boolean active = true;
 
     public ShelfPositionVO() {}
 
     public ShelfPositionVO(String name) {
         this.name = name;
+    }
+
+    public ShelfPositionVO(String name,ShelfVO shelf){
+        this.name = name;
+        this.shelf = shelf;
     }
 
     // One-to-One Relationship (ShelfPositionVO)-[HAS]->(ShelfVO)
@@ -45,6 +51,10 @@ public class ShelfPositionVO {
         return shelf;
     }
 
+    public Boolean getActive(){
+        return this.active;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -59,5 +69,9 @@ public class ShelfPositionVO {
 
     public void setShelf(ShelfVO shelf) {
         this.shelf = shelf;
+    }
+
+    public void setActive(Boolean active){
+        this.active = active;
     }
 }

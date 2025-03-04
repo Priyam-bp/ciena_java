@@ -1,6 +1,7 @@
 package com.assignmentone.springboot.assignment_one.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +26,10 @@ public class ShelfController {
     @Autowired
     private ShelfService shelfService;
 
-    @PostMapping
-    public ShelfVO saveShelf(@RequestBody ShelfVO shelf){
-        return shelfService.saveShelf(shelf);
-    }
+    // @PostMapping
+    // public ShelfVO saveShelf(@RequestBody ShelfVO shelf){
+    //     return shelfService.saveShelf(shelf);
+    // }
 
     @GetMapping("/{id}")
     public ShelfVO getShelfById(@PathVariable long id){
@@ -53,5 +54,22 @@ public class ShelfController {
     @PutMapping("/{id}")
     public ShelfVO updateShelf(@PathVariable long id, @RequestBody ShelfVO data){
         return shelfService.updateShelf(id, data);
+    }
+
+    @PostMapping
+    public ShelfVO createShelfWithShelfPos(@RequestBody Map<String,Object> data){
+        String name = (String) data.get("name");
+        String shelfType = (String) data.get("shelfType");
+        Integer shelfPosCount = (Integer) data.get("shelfPosCount");
+
+        if(name == "" || shelfType == "" || shelfPosCount == null){
+            throw new RuntimeException("Incomplete Data");
+        }
+
+        try {
+            return shelfService.createShelf(name, shelfType, shelfPosCount);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

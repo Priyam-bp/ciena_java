@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { EditComponentComponent } from '../edit-component/edit-component.component';
 import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-device-list',
@@ -36,6 +37,7 @@ export class DeviceListComponent implements OnInit {
   deviceId: number | null =null;
   availableShelfPositions = signal<Array<ShelfPosition>>([]);
   selectedShelfPosition: number | null= null;
+  router = inject(Router);
 
   editObj: Device ={
     id: undefined,
@@ -226,5 +228,10 @@ export class DeviceListComponent implements OnInit {
   applyFilter(event: Event) {
     const input = event.target as HTMLInputElement;
     this.filterText.set(input.value)
+  }
+
+  toAddShelfPosition(){
+    this.onClose();
+    this.router.navigate(['/addshelfposition'])
   }
 }

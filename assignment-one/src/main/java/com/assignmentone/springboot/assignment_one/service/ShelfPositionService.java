@@ -31,12 +31,12 @@ public class ShelfPositionService {
     }
 
     public ShelfPositionVO getShelfPostion(long id){
-        return shelfPositionRepository.findById(id).orElseThrow(()-> new RuntimeException("Shelf position not found"));
+        return shelfPositionRepository.getShelfPosById(id).orElseThrow(()-> new RuntimeException("Shelf position not found"));
     }
 
     public List<ShelfPositionVO> getAllshelfPositions(){
         try {
-            return shelfPositionRepository.findAll();
+            return shelfPositionRepository.getAllShelfPos();
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch all Shelf Positions",e);
         }
@@ -45,7 +45,7 @@ public class ShelfPositionService {
     public ResponseEntity<String> addShelfToShelfPosition(long shelfId, long shelfPositionId){
         try {
             ShelfVO shelf = shelfRepository.findById(shelfId).orElseThrow(()-> new RuntimeException("Shelf not found"));
-            ShelfPositionVO shelfPosition = shelfPositionRepository.findById(shelfPositionId).orElseThrow(()-> new RuntimeException("Shelf position not found"));
+            ShelfPositionVO shelfPosition = shelfPositionRepository.getShelfPosById(shelfPositionId).orElseThrow(()-> new RuntimeException("Shelf position not found"));
 
             if(shelfPosition.getShelf() != null){
                 throw new RuntimeException("Shelf position already has a shelf assigned");
@@ -70,10 +70,11 @@ public class ShelfPositionService {
 
     @Transactional
     public ShelfPositionVO editShelfPosition(long id,ShelfPositionVO shelfPosition){
-        ShelfPositionVO checkShelfPosition = shelfPositionRepository.findById(id).orElseThrow(()->new RuntimeException("Shelf Position not Found"));
+        if(!shelfPositionRepository.shelfPosExistsById(id)){
+            throw new RuntimeException("Shelf Position not found");
+        }
         try {
-            checkShelfPosition.setName(shelfPosition.getName());
-            return shelfPositionRepository.save(checkShelfPosition);
+            return shelfPositionRepository.updateShelfPosById(id, shelfPosition.getName());
         } catch (Exception e) {
             throw new RuntimeException("Unable to edit",e);
         }
@@ -84,7 +85,7 @@ public class ShelfPositionService {
             throw new RuntimeException("Shelf Position not found");
         }
         try {
-            shelfPositionRepository.deleteById(id);
+            shelfPositionRepository.deleteShelfPosById(id);
             return "Shelf Position deleted of id:" + id;
         } catch (Exception e) {
             throw new RuntimeException("Unable to delete",e);
