@@ -76,6 +76,7 @@ public class ShelfService {
     }
 
     //create shelfpositions on creation of shelf 
+    @Transactional
     public ShelfVO createShelf(String name,String shelfType, int shelfPosCount){
         try {
             ShelfVO shelf = new ShelfVO(name,shelfType);
@@ -84,14 +85,18 @@ public class ShelfService {
             Set<ShelfPositionVO> shelfPositions = new HashSet<>();
     
             for(int i = 0;i<shelfPosCount;i++){
-                String shelfPosName = shelf.getName() + "-Position" + i;
+                String shelfPosName = shelf.getName() + "-Position" + (i+1);
                 ShelfPositionVO sp = new ShelfPositionVO(shelfPosName);
+
+                sp.setShelf(shelf);
                 sp.setShelfId(shelf.getId());
+                
+                sp = shelfPositionRepository.save(sp);
                 shelfPositions.add(sp);
-                shelfPositionRepository.save(sp);
             }
             
             shelf.addShelfPositions(shelfPositions);
+            
             return shelfRepository.save(shelf);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create device");

@@ -1,11 +1,14 @@
 package com.assignmentone.springboot.assignment_one.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.assignmentone.springboot.assignment_one.model.Device;
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionDTO;
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
@@ -36,7 +39,23 @@ public class ShelfPositionService {
 
     public List<ShelfPositionVO> getAllshelfPositions(){
         try {
-            return shelfPositionRepository.getAllShelfPos();
+            List<ShelfPositionDTO> res = shelfPositionRepository.getAllShelfPos();
+            List<ShelfPositionVO> shelfPositions = new ArrayList<>();
+
+            if(res != null && !res.isEmpty()){
+                for(ShelfPositionDTO resItem : res){
+                    ShelfPositionVO shelfPosition = resItem.getShelfPosition();
+                    if(resItem.getDevice() != null){
+                        shelfPosition.setDevice(resItem.getDevice());
+                    }
+                    if(resItem.getShelf() != null){
+                        shelfPosition.setShelf(resItem.getShelf());
+                    }
+                    shelfPositions.add(shelfPosition);
+                }
+            }
+            return shelfPositions;
+
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch all Shelf Positions",e);
         }

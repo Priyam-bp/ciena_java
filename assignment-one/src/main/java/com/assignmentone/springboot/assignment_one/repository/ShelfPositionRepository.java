@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.assignmentone.springboot.assignment_one.model.ShelfPositionDTO;
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 
 @Repository
@@ -28,8 +29,11 @@ public interface ShelfPositionRepository extends Neo4jRepository<ShelfPositionVO
     Optional<ShelfPositionVO> getShelfPosById(@Param("id") Long id); 
 
     //get all shelf positions
-    @Query("match (s:ShelfPosition) where s.active = true return s")
-    List<ShelfPositionVO> getAllShelfPos();
+    @Query("match (s:ShelfPosition) where s.active = true \r\n" + //
+                "optional match (d:Device)-[:HAS]->(s)\r\n" + //
+                "optional match (sh:Shelf)-[:HAS]->(s)\r\n" + //
+                "return s,d,sh")
+    List<ShelfPositionDTO> getAllShelfPos();
 
     @Query("match (s:ShelfPosition) where ID(s) = $id and s.active = true \r\n" + //
                 "set s.name = $name\r\n" + //

@@ -2,7 +2,6 @@ package com.assignmentone.springboot.assignment_one.service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
-import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
-import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
+// import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -26,8 +24,8 @@ public class DeviceService implements InventoryService{
     @Autowired
     private ShelfPositionRepository shelfPositionRepository;
 
-    @Autowired
-    private ShelfRepository shelfRepository;
+    // @Autowired
+    // private ShelfRepository shelfRepository;
 
     @Override
     public Device saveDevice(Device device){
