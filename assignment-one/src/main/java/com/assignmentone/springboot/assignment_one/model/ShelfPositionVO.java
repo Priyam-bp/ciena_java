@@ -14,6 +14,7 @@ public class ShelfPositionVO {
     private Long id;
     private String name;
     private Boolean active = true;
+    private Long shelfId;
 
     public ShelfPositionVO() {}
 
@@ -27,7 +28,8 @@ public class ShelfPositionVO {
     }
 
     // One-to-One Relationship (ShelfPositionVO)-[HAS]->(ShelfVO)
-    @Relationship(type = "HAS", direction = Relationship.Direction.OUTGOING)
+    @Relationship(type = "HAS", direction = Relationship.Direction.INCOMING)
+    @JsonIgnoreProperties("shelfPosition")
     private ShelfVO shelf;
 
     // Relationship (Device)-[HAS]->(ShelfPositionVO)
@@ -55,6 +57,10 @@ public class ShelfPositionVO {
         return this.active;
     }
 
+    public Long getShelfId(){
+        return this.shelfId;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -73,5 +79,9 @@ public class ShelfPositionVO {
 
     public void setActive(Boolean active){
         this.active = active;
+    }
+
+    public void setShelfId(Long shelfId){
+        this.shelfId = shelfId;
     }
 }

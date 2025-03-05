@@ -37,9 +37,6 @@ public interface DeviceRepository extends Neo4jRepository<Device,Long>{
     @Query("match (d:Device) where ID(d) = $id and d.active = true set d.name = $name set d.deviceType = $deviceType return d")
     Device updateDevice(@Param("id") Long id,@Param("name") String name, @Param("deviceType") String deviceType);
 
-    @Query("match (d:Device) where ID(d) = $deviceId and d.active = true" +
-            "match (sp:ShelfPosition) where ID(sp) = $shelfPositionId and sp.active = true" +
-            "merge (d)-[:HAS]->(sp)" +
-            "return d")
+    @Query("match (d:Device) where ID(d) = $deviceId and d.active = true match (sp:ShelfPosition) where ID(sp) = $shelfPositionId and sp.active = true merge (d)-[:HAS]->(sp) return d")
     Optional<Device> deviceHasShelfPosition(@Param("deviceId") Long deviceId,@Param("shelfPositionId") Long shelfPositionId);
 }

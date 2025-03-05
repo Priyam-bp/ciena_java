@@ -71,6 +71,10 @@ public class Device {
         this.active = active;
     }
 
+    public void addShelfPosition(ShelfPositionVO shelfPosition){
+        shelfPositions.add(shelfPosition);
+    }
+
     @Override
     public String toString() {
         return "Device {id:" + id + ", name: " + name + ", device type:" + deviceType + "}";

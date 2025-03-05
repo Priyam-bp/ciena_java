@@ -12,13 +12,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Node("Shelf")
 public class ShelfVO {
-    @Id 
-    @GeneratedValue
+
+    @Id @GeneratedValue
     private Long id;
 
     private String name;
     private String shelfType;
-    private Long shelfPositionId;
     private Boolean active = true;
 
     public ShelfVO(){}
@@ -27,20 +26,23 @@ public class ShelfVO {
         this.id = id;
         this.name = name;
         this.shelfType = shelfType;
-        this.shelfPositionId = null;
     }
 
     public ShelfVO( String name, String shelfType){
         this.name = name;
         this.shelfType = shelfType;
-        this.shelfPositionId = null;
     }
 
-    @Relationship(type = "HAS",direction = Relationship.Direction.INCOMING)
+    @Relationship(type = "HAS",direction = Relationship.Direction.OUTGOING)
     @JsonIgnoreProperties("shelf")
     private Set<ShelfPositionVO> shelfPositions = new HashSet<>();
 
-
+    public void addShelfPositions(Set<ShelfPositionVO> shelfPositions){
+       this.shelfPositions = shelfPositions;
+       for(ShelfPositionVO shelfPosition: shelfPositions){
+        shelfPosition.setShelf(this);
+       }
+    }
     // Getter functions
     public Long getId(){
         return this.id;
@@ -50,9 +52,6 @@ public class ShelfVO {
     }
     public String getShelfType(){
         return this.shelfType;
-    }
-    public Long getShelfPositionId(){
-        return this.shelfPositionId;
     }
     public Boolean getActive(){
         return this.active;
@@ -71,15 +70,12 @@ public class ShelfVO {
     public void setShelfType(String shelfType){
         this.shelfType = shelfType;
     }
-    public void setShelfPositionId(Long shelfPositionId){
-        this.shelfPositionId = shelfPositionId;
-    }
     public void setActive(Boolean active){
         this.active = active;
     }
 
     @Override
     public String toString() {
-        return "Shelf Details: [id:" + id +" name:" +name+" shelfType:" + shelfType + " shelfPositionId:"+ shelfPositionId +"]";
+        return "Shelf Details: [id:" + id +" name:" +name+" shelfType:" + shelfType + " shelfPositionId:" +"]";
     }
 }

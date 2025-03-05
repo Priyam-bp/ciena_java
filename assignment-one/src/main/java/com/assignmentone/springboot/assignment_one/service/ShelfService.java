@@ -1,6 +1,8 @@
 package com.assignmentone.springboot.assignment_one.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -77,15 +79,20 @@ public class ShelfService {
     public ShelfVO createShelf(String name,String shelfType, int shelfPosCount){
         try {
             ShelfVO shelf = new ShelfVO(name,shelfType);
+            shelf = shelfRepository.save(shelf);
+
+            Set<ShelfPositionVO> shelfPositions = new HashSet<>();
     
             for(int i = 0;i<shelfPosCount;i++){
                 String shelfPosName = shelf.getName() + "-Position" + i;
                 ShelfPositionVO sp = new ShelfPositionVO(shelfPosName);
-                sp.setShelf(shelf);
+                sp.setShelfId(shelf.getId());
+                shelfPositions.add(sp);
                 shelfPositionRepository.save(sp);
-                shelf.getShelfPositions().add(sp);
             }
-            return shelf;
+            
+            shelf.addShelfPositions(shelfPositions);
+            return shelfRepository.save(shelf);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create device");
         }

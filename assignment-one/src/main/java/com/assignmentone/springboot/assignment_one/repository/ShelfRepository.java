@@ -15,4 +15,5 @@ public interface ShelfRepository extends Neo4jRepository<ShelfVO,Long>{
                 "}\r\n" + //
                 "return s")
     List<ShelfVO> getAvailableShelves();
+    
 }

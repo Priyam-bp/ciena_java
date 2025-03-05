@@ -2,6 +2,7 @@ package com.assignmentone.springboot.assignment_one.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -79,31 +80,22 @@ public class DeviceService implements InventoryService{
     @Transactional
     public ResponseEntity<String> addShelfPositionToDevice(Long deviceId, Long shelfPositionId) {
         try {
-            Device device = deviceRepository.getDeviceById(deviceId).orElseThrow(() -> new RuntimeException("Device not found"));
-            ShelfPositionVO shelfPosition = shelfPositionRepository.getShelfPosById(shelfPositionId).orElseThrow(() -> new RuntimeException("Shelf Position not found"));
+            Device device = deviceRepository.findById(deviceId).orElseThrow(() -> new RuntimeException("Device not found"));
+            ShelfPositionVO shelfPosition = shelfPositionRepository.findById(shelfPositionId).orElseThrow(() -> new RuntimeException("Shelf Position not found"));
 
-            if(shelfPosition.getDevice() != null){
+            if (shelfPosition.getDevice() != null) {
                 throw new RuntimeException("Shelf position already has a Device");
-            }
-
-            ShelfVO shelf = shelfPosition.getShelf();
-            if(shelf == null){
-                System.out.println(shelf);
-                throw new RuntimeException("Shelf Position must be attched to a shelf");
             }
 
             if(device.getShelfPositions() == null){
                 device.setShelfPositions(new HashSet<>());
             }
 
-            
             shelfPosition.setDevice(device);
             device.getShelfPositions().add(shelfPosition);
-            shelf.getShelfPositions().add(shelfPosition);
 
             deviceRepository.save(device);
             shelfPositionRepository.save(shelfPosition);
-            shelfRepository.save(shelf);
 
             return ResponseEntity.ok("Relationship Established");
         } catch (Exception e) {
