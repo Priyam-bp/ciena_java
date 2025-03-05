@@ -22,7 +22,8 @@ public class Device {
     public Device() {
     }
 
-    public Device(Long deviceId, String name, String deviceType) {
+    public Device(Long id, String name, String deviceType) {
+        this.id = id;
         this.name = name;
         this.deviceType = deviceType;
     }

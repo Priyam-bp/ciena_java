@@ -8,14 +8,16 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
+import com.assignmentone.springboot.assignment_one.model.DeviceDTO;
 
 public interface DeviceRepository extends Neo4jRepository<Device,Long>{
 
     //Get all devices
-    @Query("match (d:Device)\r\n" + //
-                "where d.active = true\r\n" + //
-                "return d")
-    List<Device> getAllDevices();
+    @Query("match (device:Device) where device.active = true\r\n" + //
+                "optional match (device)-[:HAS]->(s:ShelfPosition)\r\n" + //
+                "where s.active = true\r\n" + //
+                "return device, ID(s) as shelfPositionid, s.name as shelfPositionname")
+    List<DeviceDTO> getAllDevices();
 
     //Save device
     @Query("merge (d:Device {name: $name, deviceType: $deviceType,}) return d")

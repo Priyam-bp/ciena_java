@@ -45,12 +45,26 @@ public class ShelfPositionService {
             if(res != null && !res.isEmpty()){
                 for(ShelfPositionDTO resItem : res){
                     ShelfPositionVO shelfPosition = resItem.getShelfPosition();
-                    if(resItem.getDevice() != null){
-                        shelfPosition.setDevice(resItem.getDevice());
+
+                    Long deviceId = resItem.getDeviceId();
+                    String deviceName = resItem.getDeviceName();
+                    String deviceType = resItem.getDeviceType();
+
+                    Long shelfId = resItem.getShelfId();
+                    String shelfName = resItem.getShelfName();
+                    String shelfType = resItem.getShelfType();
+
+                    if(deviceId != null){
+                        Device device = new Device(deviceId,deviceName,deviceType);
+                        shelfPosition.setDevice(device);
                     }
-                    if(resItem.getShelf() != null){
-                        shelfPosition.setShelf(resItem.getShelf());
+
+                    if(shelfId != null){
+                        ShelfVO shelf = new ShelfVO(shelfId,shelfName,shelfType);
+                        shelfPosition.setShelf(shelf);
                     }
+
+
                     shelfPositions.add(shelfPosition);
                 }
             }
@@ -65,13 +79,13 @@ public class ShelfPositionService {
         try {
             ShelfVO shelf = shelfRepository.findById(shelfId).orElseThrow(()-> new RuntimeException("Shelf not found"));
             ShelfPositionVO shelfPosition = shelfPositionRepository.getShelfPosById(shelfPositionId).orElseThrow(()-> new RuntimeException("Shelf position not found"));
-
+ 
             if(shelfPosition.getShelf() != null){
                 throw new RuntimeException("Shelf position already has a shelf assigned");
             }
 
-            shelfPosition.setShelf(shelf);
-            shelfPositionRepository.save(shelfPosition);
+            shelfPosition.setShelf((ShelfVO) shelf);
+            shelfPositionRepository.save((ShelfPositionVO) shelfPosition);
 
             return ResponseEntity.ok("Relationship established succesfully");
         } catch (Exception e) {

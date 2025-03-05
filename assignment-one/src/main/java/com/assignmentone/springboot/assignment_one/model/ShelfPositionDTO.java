@@ -1,22 +1,47 @@
 package com.assignmentone.springboot.assignment_one.model;
 
 public class ShelfPositionDTO {
-    private Device device;
     private ShelfPositionVO shelfPosition;
-    private ShelfVO shelf;
 
-    public ShelfPositionDTO(ShelfPositionVO shelfPosition, ShelfVO shelf, Device  device){
+    private String deviceName;
+    private String deviceType;
+    private Long deviceId;
+
+    private String shelfName;
+    private String shelfType;
+    private Long shelfId;
+
+    public ShelfPositionDTO(ShelfPositionVO shelfPosition, String deviceName, String deviceType, Long deviceId, String shelfName, String shelfType, Long shelfId){
         this.shelfPosition = shelfPosition;
-        this.device = device;
-        this.shelf = shelf;
+
+        this.deviceId = deviceId;
+        this.deviceName = deviceName;
+        this.deviceType = deviceType;
+
+        this.shelfId = shelfId;
+        this.shelfName = shelfName;
+        this.shelfType = shelfType;
     }
 
-    public Device getDevice() {
-        return device;
+    public Long getDeviceId() {
+        return deviceId;
+    }
+    public String getDeviceName() {
+        return deviceName;
+    }
+    public String getDeviceType() {
+        return deviceType;
     }
 
-    public ShelfVO getShelf() {
-        return shelf;
+
+    public Long getShelfId() {
+        return shelfId;
+    }
+    public String getShelfName() {
+        return shelfName;
+    }
+    public String getShelfType() {
+        return shelfType;
     }
     
     public ShelfPositionVO getShelfPosition() {

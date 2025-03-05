@@ -1,5 +1,6 @@
 package com.assignmentone.springboot.assignment_one.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
+import com.assignmentone.springboot.assignment_one.model.DeviceDTO;
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
@@ -67,7 +69,23 @@ public class DeviceService implements InventoryService{
     @Override
     public List<Device> getAllDevices(){
         try {
-            return deviceRepository.getAllDevices();
+            List<DeviceDTO> res = deviceRepository.getAllDevices();
+            List<Device> deviceList = new ArrayList<>();
+            System.out.println("RESSSSSSSSSSS"+res.get(0).getId());
+            if(res != null && !res.isEmpty()){
+                for(DeviceDTO resItem: res){
+                    Device device = resItem.getDevice();
+                    ShelfPositionVO shelfPosition = new ShelfPositionVO();
+                    System.out.println("CHECKKKKK"+resItem.getName()+resItem.getId());
+                    if(resItem.getId() != null){
+                        shelfPosition.setName(resItem.getName());
+                        shelfPosition.setId(resItem.getId());
+                        device.addShelfPosition(shelfPosition);
+                    }
+                    deviceList.add(device);
+                }
+            }
+            return deviceList;
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch",e);
         }

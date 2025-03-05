@@ -29,10 +29,10 @@ public interface ShelfPositionRepository extends Neo4jRepository<ShelfPositionVO
     Optional<ShelfPositionVO> getShelfPosById(@Param("id") Long id); 
 
     //get all shelf positions
-    @Query("match (s:ShelfPosition) where s.active = true \r\n" + //
-                "optional match (d:Device)-[:HAS]->(s)\r\n" + //
-                "optional match (sh:Shelf)-[:HAS]->(s)\r\n" + //
-                "return s,d,sh")
+    @Query("match (sp:ShelfPosition) where sp.active = true \r\n" + //
+                "optional match (d:Device)-[:HAS]->(sp)\r\n" + //
+                "optional match (s:Shelf)-[:HAS]->(sp)\r\n" + //
+                "return sp as shelfPosition,ID(d) as deviceId, d.name as deviceName, d.deviceType as deviceType, ID(s) as shelfId, s.name as shelfName, s.shelfType as shelfType")
     List<ShelfPositionDTO> getAllShelfPos();
 
     @Query("match (s:ShelfPosition) where ID(s) = $id and s.active = true \r\n" + //
