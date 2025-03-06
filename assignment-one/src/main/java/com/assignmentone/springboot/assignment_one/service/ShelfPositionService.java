@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.assignmentone.springboot.assignment_one.model.Device;
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionDTO;
@@ -14,7 +15,7 @@ import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
 
-import jakarta.transaction.Transactional;
+
 
 @Service
 public class ShelfPositionService {
@@ -25,6 +26,7 @@ public class ShelfPositionService {
     @Autowired
     private ShelfRepository shelfRepository;
 
+    @Transactional
     public ShelfPositionVO saveSheldPostion(ShelfPositionVO shelfPosition){
         try {
             return shelfPositionRepository.save(shelfPosition);
@@ -33,10 +35,12 @@ public class ShelfPositionService {
         }
     }
 
+    @Transactional(readOnly = true)
     public ShelfPositionVO getShelfPostion(long id){
         return shelfPositionRepository.getShelfPosById(id).orElseThrow(()-> new RuntimeException("Shelf position not found"));
     }
 
+    @Transactional(readOnly = true)
     public List<ShelfPositionVO> getAllshelfPositions(){
         try {
             List<ShelfPositionDTO> res = shelfPositionRepository.getAllShelfPos();
@@ -75,6 +79,7 @@ public class ShelfPositionService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> addShelfToShelfPosition(long shelfId, long shelfPositionId){
         try {
             ShelfVO shelf = shelfRepository.findById(shelfId).orElseThrow(()-> new RuntimeException("Shelf not found"));
@@ -93,6 +98,7 @@ public class ShelfPositionService {
         }
     }
     
+    @Transactional(readOnly = true)
     public List<ShelfPositionVO> getAvailableShelfPositions(){
         try {
             return shelfPositionRepository.getAvailableShelfPositions();
@@ -113,6 +119,7 @@ public class ShelfPositionService {
         }
     }
 
+    @Transactional
     public String deleteShelfPosition(long id){
         if(!shelfPositionRepository.existsById(id)){
             throw new RuntimeException("Shelf Position not found");

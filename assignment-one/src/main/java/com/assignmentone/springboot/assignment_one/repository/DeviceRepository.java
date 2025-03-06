@@ -24,11 +24,18 @@ public interface DeviceRepository extends Neo4jRepository<Device,Long>{
     Device saveDevice(@Param("name") String name,@Param("deviceType") String deviceType);
 
     //find device by id
-    @Query("match (d:Device) where ID(d) = $id and d.active = true return d")
-    Optional<Device> getDeviceById(@Param("id") Long id);
+    @Query("match (device:Device) where ID(device) = $id and device.active = true\r\n" + //
+            "optional match (device)-[:HAS]->(shelfPosition:ShelfPosition)\r\n" + //
+            "return device, ID(shelfPosition) as shelfPositionid, shelfPosition.name as shelfPositionname")
+    Optional<DeviceDTO> getDeviceById(@Param("id") Long id);
 
     //delete by id
-    @Query("match (d:Device) where ID(d) = $id set d.active = false return d.name")
+    @Query("match (d:Device)\r\n" + //
+                "where ID(d) = $id and d.active = true\r\n" + //
+                "match (d)-[r:HAS]->(sh:ShelfPosition)\r\n" + //
+                "delete r\r\n" + //
+                "set d.active = false\r\n" + //
+                "return d.name")
     Optional<String> deleteDeviceById(@Param("id") Long id);
 
     //check if device exisits and is active

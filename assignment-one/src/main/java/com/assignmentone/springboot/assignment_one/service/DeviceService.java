@@ -3,6 +3,7 @@ package com.assignmentone.springboot.assignment_one.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ import com.assignmentone.springboot.assignment_one.repository.DeviceRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 // import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class DeviceService implements InventoryService{
@@ -30,6 +31,7 @@ public class DeviceService implements InventoryService{
     // private ShelfRepository shelfRepository;
 
     @Override
+    @Transactional
     public Device saveDevice(Device device){
         try {
             return deviceRepository.save(device);
@@ -39,11 +41,52 @@ public class DeviceService implements InventoryService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Device getDevice(Long id) {
-        return deviceRepository.getDeviceById(id).orElseThrow(()->new RuntimeException("Device not found"));
+        try {
+            Optional<DeviceDTO> res = deviceRepository.getDeviceById(id);
+            if(res == null){
+                throw new RuntimeException("Device not found");
+            }
+
+            Device device = res.get().getDevice();
+            ShelfPositionVO shelfPosition = new ShelfPositionVO(res.get().getId(),res.get().getName());
+            device.addShelfPosition(shelfPosition);
+
+            return device;
+
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }    
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<Device> getAllDevices(){
+        try {
+            List<DeviceDTO> res = deviceRepository.getAllDevices();
+            List<Device> deviceList = new ArrayList<>();
+            if(res != null && !res.isEmpty()){
+                for(DeviceDTO resItem: res){
+                    Device device = resItem.getDevice();
+                    ShelfPositionVO shelfPosition = new ShelfPositionVO();
+                    System.out.println("CHECKKKKK"+resItem.getName()+resItem.getId());
+                    if(resItem.getId() != null){
+                        shelfPosition.setName(resItem.getName());
+                        shelfPosition.setId(resItem.getId());
+                        device.addShelfPosition(shelfPosition);
+                    }
+                    deviceList.add(device);
+                }
+            }
+            return deviceList;
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to fetch",e);
+        }
+    }
+
+    @Override
+    @Transactional
     public String deleteDevice(Long id){
         if(!deviceRepository.deviceExistsById(id)){
             throw new RuntimeException("Device not found");
@@ -62,32 +105,6 @@ public class DeviceService implements InventoryService{
             return deviceRepository.updateDevice(id, device.getName(), device.getDeviceType());
         } catch (Exception e) {
             throw new RuntimeException("Unable to update device",e);
-        }
-    }
-    
-
-    @Override
-    public List<Device> getAllDevices(){
-        try {
-            List<DeviceDTO> res = deviceRepository.getAllDevices();
-            List<Device> deviceList = new ArrayList<>();
-            System.out.println("RESSSSSSSSSSS"+res.get(0).getId());
-            if(res != null && !res.isEmpty()){
-                for(DeviceDTO resItem: res){
-                    Device device = resItem.getDevice();
-                    ShelfPositionVO shelfPosition = new ShelfPositionVO();
-                    System.out.println("CHECKKKKK"+resItem.getName()+resItem.getId());
-                    if(resItem.getId() != null){
-                        shelfPosition.setName(resItem.getName());
-                        shelfPosition.setId(resItem.getId());
-                        device.addShelfPosition(shelfPosition);
-                    }
-                    deviceList.add(device);
-                }
-            }
-            return deviceList;
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to fetch",e);
         }
     }
 

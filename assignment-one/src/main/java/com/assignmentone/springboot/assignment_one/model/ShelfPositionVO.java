@@ -18,7 +18,12 @@ public class ShelfPositionVO {
 
     public ShelfPositionVO() {}
 
-    public ShelfPositionVO(String name) {
+    public ShelfPositionVO(String name){
+        this.name = name;
+    }
+
+    public ShelfPositionVO(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 

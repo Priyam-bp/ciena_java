@@ -7,13 +7,13 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
 import com.assignmentone.springboot.assignment_one.repository.ShelfRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class ShelfService {
@@ -24,6 +24,7 @@ public class ShelfService {
     @Autowired 
     private ShelfPositionRepository shelfPositionRepository;
 
+    @Transactional
     public ShelfVO saveShelf(ShelfVO shelf){
         try {
             return shelfRepository.save(shelf);
@@ -31,11 +32,13 @@ public class ShelfService {
             throw new RuntimeException("Unable to save shelves",e);
         }
     }
-
+    
+    @Transactional(readOnly = true)
     public ShelfVO getShelf(long id){
         return shelfRepository.findById(id).orElseThrow(()-> new RuntimeException("Shelf not found"));
     }
 
+    @Transactional(readOnly = true)
     public List<ShelfVO> getAllShelves(){
         try {
             return shelfRepository.findAll();
@@ -44,6 +47,7 @@ public class ShelfService {
         }
     }
 
+    @Transactional
     public ResponseEntity<String> deleteShelfById(long id){
         if(!shelfRepository.existsById(id)){
             throw new RuntimeException("Shelf does not exist");
@@ -56,6 +60,7 @@ public class ShelfService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<ShelfVO> getAvailableShelves(){
         try {
             return shelfRepository.getAvailableShelves();
