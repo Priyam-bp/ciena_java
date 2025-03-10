@@ -18,6 +18,7 @@ export class AddShelfComponent {
   shelfService = inject(ShelfService);
   toast = inject(ToastrService);
   router = inject(Router);
+  shelfPositionCount!: number | null;
 
   shelf: Shelf={
     name:undefined,
@@ -27,11 +28,11 @@ export class AddShelfComponent {
 
   saveShelf(): void{
     try {
-      if(this.shelf.name == undefined || this.shelf.shelfType == undefined){
+      if(this.shelf.name == undefined || this.shelf.shelfType == undefined || this.shelfPositionCount == null){
         this.toast.error("Please fill all shelf details");
         return
       } 
-      this.shelfService.saveShelf(this.shelf).subscribe({
+      this.shelfService.saveShelf(this.shelf.name,this.shelf.shelfType,this.shelfPositionCount).subscribe({
         next: (res:Shelf)=>{
           console.log(res);
           this.toast.success("Shelf Added Succesfully")

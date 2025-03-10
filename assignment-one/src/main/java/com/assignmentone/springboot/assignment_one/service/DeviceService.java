@@ -45,20 +45,22 @@ public class DeviceService implements InventoryService{
     public Device getDevice(Long id) {
         try {
             Optional<DeviceDTO> res = deviceRepository.getDeviceById(id);
-            if(res == null){
+            if(res == null || !res.isPresent()){
                 throw new RuntimeException("Device not found");
             }
-
             Device device = res.get().getDevice();
-            ShelfPositionVO shelfPosition = new ShelfPositionVO(res.get().getId(),res.get().getName());
-            device.addShelfPosition(shelfPosition);
-
+            if(res.get().getId() != null){
+                ShelfPositionVO shelfPosition = new ShelfPositionVO(res.get().getId(),res.get().getName());
+                device.addShelfPosition(shelfPosition);
+            }
+            System.out.println("afterrr"+device);
             return device;
 
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }    
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -115,6 +117,10 @@ public class DeviceService implements InventoryService{
         try {
             Device device = deviceRepository.findById(deviceId).orElseThrow(() -> new RuntimeException("Device not found"));
             ShelfPositionVO shelfPosition = shelfPositionRepository.findById(shelfPositionId).orElseThrow(() -> new RuntimeException("Shelf Position not found"));
+
+            if(!deviceRepository.checkShelf(shelfPositionId)){
+                throw new RuntimeException("Shelf Position is not associated to a shelf");
+            }
 
             if (shelfPosition.getDevice() != null) {
                 throw new RuntimeException("Shelf position already has a Device");

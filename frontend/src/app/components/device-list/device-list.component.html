@@ -26,7 +26,7 @@
                 }
                 </td>
                 <div>
-                    <td><button type="button" class="btn btn-success" (click)="onOpen(device.id!)">Add Shelf Position</button></td>
+                    <td><button type="button" class="btn btn-success" (click)="onOpen(device.id!, device.name!)">Add Shelf Position</button></td>
                     <td><button type="button" class="btn btn-primary" (click)="openDialog(device.id!,device.name!,device.deviceType!)">Edit</button></td>
                     <td><button type="button" class="btn btn-danger" (click)="openDelDialog(device.id!,device.name!,device.deviceType!)">🗑️</button></td>
                 </div>
@@ -34,41 +34,4 @@
         }
     </tbody>
 </table>
-</div>
-
-<div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header" style="display: flex; flex-direction: row; justify-content: space-between;">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Shelf Position to Device</h5>
-                <button (click)="onClose()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Select a Shelf Position</p>
-                @if (availableShelfPositions() == null || availableShelfPositions().length == 0) {
-                    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                        <p>No shelf positions available</p>
-                        <button mat-stroked-button (click)="toAddShelfPosition()">Add Shelf Position</button>
-                    </div>
-                }
-                @else {
-                    <div>
-                        @for (position of availableShelfPositions(); track $index) {
-                            <div  (click)="selectedShelfPositionId(position.id!)" [ngClass]="{'selectedItem': selectedShelfPosition === position.id}" class="shelfPosition" style="cursor: pointer; border: 1px solid grey; padding: 10px; border-radius: 7px; margin-bottom: 5px;">
-                                <div>{{position.name}}</div>
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onClose()">Close</button>
-                <button type="button" class="btn btn-primary" (click)="addShelfPositionToDevice()">Save changes</button>
-            </div>
-        </div>
-
-    </div>
 </div>

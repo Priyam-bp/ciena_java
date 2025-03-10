@@ -27,14 +27,5 @@ export class HomeComponent {
       color:"green",
       path:'/addshelf'
     },
-    {
-      id: 3,
-      name:"Shelf Position",
-      subHeading:"Manage your shelf positions",
-      button:"+ Add Position",
-      iconLink:'bi bi-grid',
-      color:"purple",
-      path:'/addshelfposition'
-    }
   ]
 }

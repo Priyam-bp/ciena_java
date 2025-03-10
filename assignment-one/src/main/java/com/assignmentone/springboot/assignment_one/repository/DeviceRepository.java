@@ -48,4 +48,13 @@ public interface DeviceRepository extends Neo4jRepository<Device,Long>{
 
     @Query("match (d:Device) where ID(d) = $deviceId and d.active = true match (sp:ShelfPosition) where ID(sp) = $shelfPositionId and sp.active = true merge (d)-[:HAS]->(sp) return d")
     Optional<Device> deviceHasShelfPosition(@Param("deviceId") Long deviceId,@Param("shelfPositionId") Long shelfPositionId);
+
+    //check if shelf position is connected to a shelf 
+    @Query("match (s:Shelf) \r\n" + //
+                "where exists {\r\n" + //
+                "    match (s)-[:HAS]->(sp:ShelfPosition)\r\n" + //
+                "    where ID(sp) = $shelfPositionId and sp.active = true\r\n" + //
+                "}\r\n" + //
+                "return s is not null as res")
+    Boolean checkShelf(@Param("shelfPositionId") Long shelfPositionId);
 }

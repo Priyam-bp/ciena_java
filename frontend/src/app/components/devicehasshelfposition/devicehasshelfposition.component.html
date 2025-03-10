@@ -1,0 +1,49 @@
+<mat-dialog-content style="width: auto;">
+    <mat-stepper style="width: 100%;" #stepper>
+        <mat-step [stepControl]="firstFormGroup"  errorMessage="Name is required.">
+            <ng-template matStepLabel>Select a shelf</ng-template>
+          <div style="display: flex; flex-direction: row; gap: 5px;">
+              <div *ngFor="let item of data.shelves; let index = index">
+                    <div [ngClass]="{'selectedShelf':selectedShelfId === index}" (click)="selectShelf(index)" style="display: flex; flex-direction: row; border: 1px solid black; align-items: center; justify-content: center; gap: 10px; padding: 5px; cursor: pointer; border-radius: 15px; margin-top: 10px; margin-bottom: 10px;">
+                        <h5 style="align-items: center; justify-content: center; margin-top: 7px;">{{item.name}}</h5>
+                        <span style="display: flex; background: green; color: white; padding: 3px; border-radius: 50%; width: 25px; justify-content: center; align-items: center;">{{item.shelfPositions.length}}</span>
+                    </div>
+            </div>
+          </div>
+          <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+          </div>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup" errorMessage="Address is required.">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Select a Shelf Position</ng-template>
+                <ng-container *ngIf="selectedShelfId !== null">
+                    @for (item of data.shelves[selectedShelfId].shelfPositions; track $index) {
+                        <div [ngClass]="{'selectedShelfPosition':shelfPositionId === item.id}" (click)="selectedShelfPositionId(item.id,item.name)" style="display: flex; flex-direction: row; border: 1px solid black; align-items: center; justify-content: center; gap: 10px; padding: 5px; cursor: pointer;">
+                            <h5 style="align-items: center; justify-content: center; margin-top: 7px;">{{item.name}}</h5>
+                        </div>
+                    }
+                </ng-container>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Finish</ng-template>
+          <div style="display: flex; flex-direction: column;gap: 10px; justify-content: center; align-items: center; margin: 10px 10px;">
+            <div>
+                {{data.deviceName}}-----[HAS]-----{{shelfPositionName}}
+            </div>
+            <button mat-raised-button (click)="addShelfPositionToDevice()">Confirm relationship</button>
+          </div>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+</mat-dialog-content>
+  

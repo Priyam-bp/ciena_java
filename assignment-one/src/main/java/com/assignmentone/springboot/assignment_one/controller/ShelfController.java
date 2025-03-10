@@ -72,4 +72,13 @@ public class ShelfController {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @GetMapping("/getShelfWithShelfPositions")
+    public List<ShelfVO> getShelfWithShelfPositions(){
+        try {
+           return shelfService.getShelfWithShelfPositions();
+        } catch (Exception e) {
+           throw new RuntimeException(e.getMessage());
+        }
+    }
 }

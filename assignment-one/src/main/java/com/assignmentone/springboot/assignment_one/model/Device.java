@@ -35,7 +35,7 @@ public class Device {
 
     // Getter functions  
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -56,6 +56,10 @@ public class Device {
     }
 
     // Setter functions
+
+    public void setId(Long id){
+        this.id = id;
+    }
     public void setName(String name) {
         this.name = name;
     }

@@ -9,23 +9,33 @@ import { ShelfPositionService } from '../../services/shelfPositionService/shelf-
 import { HttpErrorResponse } from '@angular/common/http';
 import { Addshelfpositionrequest } from '../../model/addShelfPositionRequest/addshelfpositionrequest';
 import {MatButtonModule} from '@angular/material/button';
+import {MatStepperModule} from '@angular/material/stepper';
 import {
   MatDialog,
 } from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EditComponentComponent } from '../edit-component/edit-component.component';
 import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { DevicehasshelfpositionComponent } from '../devicehasshelfposition/devicehasshelfposition.component';
+import { Shelf } from '../../model/shelf/shelf';
 
 @Component({
   selector: 'app-device-list',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule,MatStepperModule,ReactiveFormsModule,MatFormFieldModule],
   templateUrl: './device-list.component.html',
-  styleUrls: ['./device-list.component.css'] 
+  styleUrls: ['./device-list.component.css'] ,
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {showError: true},
+    },
+  ],
 })
 export class DeviceListComponent implements OnInit {
 
@@ -35,10 +45,11 @@ export class DeviceListComponent implements OnInit {
   
   deviceItems = signal<Array<Device>>([]);
   deviceId: number | null =null;
+  deviceName: string | null = null;
   availableShelfPositions = signal<Array<ShelfPosition>>([]);
   selectedShelfPosition: number | null= null;
   router = inject(Router);
-
+  shelves = [];
   editObj: Device ={
     id: undefined,
     name:undefined,
@@ -66,31 +77,34 @@ export class DeviceListComponent implements OnInit {
   }
   ngOnInit(): void {
     this.callDevice();
+    this.getShelves();
   }  
+  addShelfPositionDialog = inject(MatDialog);
 
-  onOpen(id: number){
-    console.log("Selected Device"+id);
-    this.deviceId= id;
-
-    this.getAvailableShelfPositions();
+  onOpen(id:number,deviceName:string){
+    this.deviceId = id;
+    this.deviceName = deviceName;
     
-    if(typeof document !== "undefined"){
-      const modal = document.getElementById('exampleModalLong');
-      if(modal){
-        const mod = new bootstap.Modal(modal);
-        mod.show()
-      }
-    }
+    this.addShelfPositionDialog.open(DevicehasshelfpositionComponent,{
+      data:{shelves: this.shelves,deviceId:this.deviceId,deviceName:deviceName}
+    })
   }
 
   onClose(){
-    if(typeof document !== "undefined"){
-      const modal = document.getElementById('exampleModalLong');
-      if(modal){
-        const mod = bootstap.Modal.getInstance(modal);
-        this.selectedShelfPosition = null;
-        mod?.hide()
-      }
+    
+  }
+
+  getShelves(){
+    try {
+      this.deviceService.getShelfAndShelfPositions().subscribe({
+        next:(res: any)=>{
+          this.shelves = res;
+          console.log(res);
+          
+        }
+      })
+    } catch (error) {
+      
     }
   }
 
@@ -113,35 +127,6 @@ export class DeviceListComponent implements OnInit {
     this.selectedShelfPosition = this.selectedShelfPosition === id ? null : id;
   }
 
-  addShelfPositionToDevice(){
-    try {
-      console.log(this.selectedShelfPosition, this.deviceId);
-      
-      if(this.selectedShelfPosition == null || this.deviceId == null){
-        alert('Please select a Shelf & a Shelf Position')
-        return;
-      }
-      
-      const data:Addshelfpositionrequest = {
-        deviceId: this.deviceId,
-        shelfPositionId: this.selectedShelfPosition
-      }
-
-      this.deviceService.addShelfPositionToDevice(data).subscribe({
-        next: (res: any)=>{
-          console.log(res);
-          this.toast.success("Relationship added")
-          this.callDevice();
-          this.onClose()
-        },
-        error: (err: HttpErrorResponse)=>{
-          this.toast.error(err.error.message)
-        }
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
 
   //Edit Decvice

@@ -15,8 +15,8 @@ export class ShelfService {
     return this.http.get<Array<Shelf>>(`${this.url}/shelf`);
   }
 
-  saveShelf(shelf: Shelf): Observable<Shelf>{
-    return this.http.post<Shelf>(`${this.url}/shelf`,shelf);
+  saveShelf(name: string, shelfType: string, shelfPosCount: number): Observable<Shelf> {
+    return this.http.post<Shelf>(`${this.url}/shelf`, {name, shelfType, shelfPosCount});
   }
 
   getAvailableShelves(){

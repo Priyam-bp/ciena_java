@@ -34,7 +34,7 @@ public class ShelfVO {
     }
 
     @Relationship(type = "HAS",direction = Relationship.Direction.OUTGOING)
-    @JsonIgnoreProperties("shelf")
+    @JsonIgnoreProperties({"shelf","device"})
     private Set<ShelfPositionVO> shelfPositions = new HashSet<>();
 
     public void addShelfPositions(Set<ShelfPositionVO> shelfPositions){
@@ -72,6 +72,9 @@ public class ShelfVO {
     }
     public void setActive(Boolean active){
         this.active = active;
+    }
+    public void setShelfPositions(Set<ShelfPositionVO> shelfPostitions){
+        this.shelfPositions = shelfPostitions;
     }
 
     @Override

@@ -32,4 +32,8 @@ export class DeviceService {
   deleteDevice(id:number){
     return this.http.delete(`${this.url}/devices/${id}`,{responseType:'text'});
   }
+
+  getShelfAndShelfPositions(){
+    return this.http.get(`${this.url}/shelf/getShelfWithShelfPositions`);
+  }
 }

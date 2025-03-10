@@ -10,6 +10,10 @@
               <label for="shelfType" class="form-label">Shelf Type</label>
               <input placeholder="Shelf Type" type="text" class="form-control" [(ngModel)]="shelf.shelfType" name="shelfType">
             </div>
+            <div class="mb-3">
+              <label for="shelfPositionType" class="form-label">Number of Shelf Positions</label>
+              <input placeholder="Number of shelf positions" type="number" class="form-control" [(ngModel)]="shelfPositionCount" name="shelfPositionCount">
+            </div>
             <div style="display: flex; justify-content: center;"><button type="submit" (click)="saveShelf()" class="btn btn-primary">Add Shelf</button></div>
           </form>
     </div>

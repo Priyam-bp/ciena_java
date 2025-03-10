@@ -1,7 +1,10 @@
 package com.assignmentone.springboot.assignment_one.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.assignmentone.springboot.assignment_one.model.ShelfDTO;
 import com.assignmentone.springboot.assignment_one.model.ShelfPositionVO;
 import com.assignmentone.springboot.assignment_one.model.ShelfVO;
 import com.assignmentone.springboot.assignment_one.repository.ShelfPositionRepository;
@@ -41,7 +45,7 @@ public class ShelfService {
     @Transactional(readOnly = true)
     public List<ShelfVO> getAllShelves(){
         try {
-            return shelfRepository.findAll();
+            return shelfRepository.getAllShelf();
         } catch (Exception e) {
             throw new RuntimeException("Unable to fetch shelves");
         }
@@ -49,11 +53,11 @@ public class ShelfService {
 
     @Transactional
     public ResponseEntity<String> deleteShelfById(long id){
-        if(!shelfRepository.existsById(id)){
+        if(!shelfRepository.findShelfById(id)){
             throw new RuntimeException("Shelf does not exist");
         }
         try {
-            shelfRepository.deleteById(id);
+            shelfRepository.deleteShelfById(id);
             return ResponseEntity.ok("Shelf deleted Succesfully");
         } catch (Exception e) {
             throw new RuntimeException("Unable to delete",e);
@@ -70,11 +74,12 @@ public class ShelfService {
     }
 
     @Transactional
-    public ShelfVO updateShelf(long id, ShelfVO shelf){
-        ShelfVO checkShelf = shelfRepository.findById(id).orElseThrow(()-> new RuntimeException("Shelf Not Found"));
+    public ShelfVO updateShelf(Long id, ShelfVO shelf){
+        if(!shelfRepository.findShelfById(id)){
+            throw new RuntimeException("Shelf does not exist");
+        }
         try {
-            checkShelf.setName(shelf.getName());
-            return shelfRepository.save(checkShelf);
+            return shelfRepository.editShelf(id, shelf.getName(), shelf.getShelfType());
         } catch (Exception e) {
             throw new RuntimeException("Unable to update shelf");
         }
@@ -105,6 +110,28 @@ public class ShelfService {
             return shelfRepository.save(shelf);
         } catch (Exception e) {
             throw new RuntimeException("Unable to create device");
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<ShelfVO> getShelfWithShelfPositions(){
+        try {
+            List<ShelfDTO> res = shelfRepository.getShelfWithShelfPositons();
+            Map<Long,ShelfVO> shelfMap = new HashMap<>();
+            for(ShelfDTO resItem : res){
+                ShelfVO currShelf = shelfMap.get(resItem.getShelf().getId());
+                if(currShelf == null){
+                    currShelf = resItem.getShelf();
+                    shelfMap.put(resItem.getShelf().getId(), currShelf);
+                }
+                if(resItem.getShelfPositionId() != null){
+                    ShelfPositionVO currShelfPosition = new ShelfPositionVO(resItem.getShelfPositionId(),resItem.getShelfPositionName());
+                    currShelf.getShelfPositions().add(currShelfPosition);
+                }
+            }
+            return new ArrayList<>(shelfMap.values());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
