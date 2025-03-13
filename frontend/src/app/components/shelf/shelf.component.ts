@@ -9,10 +9,12 @@ import { DeletemodalComponent } from '../deletemodal/deletemodal.component';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ToastrService } from 'ngx-toastr';
-
+import {MatIconModule} from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-shelf',
-  imports: [MatFormFieldModule, MatInputModule],
+  imports: [MatFormFieldModule, MatInputModule,MatIconModule,MatButtonModule],
   templateUrl: './shelf.component.html',
   styleUrl: './shelf.component.css'
 })
@@ -20,7 +22,7 @@ export class ShelfComponent implements OnInit{
   shelfService = inject(ShelfService);
   shelfItems = signal<Array<Shelf>>([]);
   toast = inject(ToastrService);
-
+  router = inject(Router);
   editObj: Shelf = {
     id: undefined,
     name:undefined,
@@ -31,6 +33,7 @@ export class ShelfComponent implements OnInit{
     name:undefined,
     shelfType:undefined
   }
+  shelfSummary = [];
   
   ngOnInit(): void {
       this.callShelf();
@@ -126,5 +129,9 @@ export class ShelfComponent implements OnInit{
   applyFilter(event: Event){
     const filter = event.target as HTMLInputElement;
     this.filterText.set(filter.value);
+  }
+  
+  navigateToShelfSummary(id:number){
+    this.router.navigate([`/shelfSummary/${id}`]);
   }
 }

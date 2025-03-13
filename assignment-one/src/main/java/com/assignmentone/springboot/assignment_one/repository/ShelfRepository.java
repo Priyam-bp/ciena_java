@@ -1,6 +1,7 @@
 package com.assignmentone.springboot.assignment_one.repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -57,4 +58,13 @@ public interface ShelfRepository extends Neo4jRepository<ShelfVO,Long>{
                 "where ID(s) = $id and s.active = true\r\n" + //
                 "return s is not null as value")
     Boolean findShelfById(@Param("id") Long id);
+
+
+    //assignment 4 custom query: fetch shelf summary
+    @Query("match (shelf:Shelf)-[:HAS]->(shelfPosition:ShelfPosition)\r\n" + //
+                "where ID(shelf) = $id and shelf.active = true and shelfPosition.active = true\r\n" + //
+                "optional match (shelfPosition)<-[:HAS]-(device:Device)\r\n" + //
+                "where device.active = true\r\n" + //
+                "return shelf,collect(shelfPosition) as shelfPositions,collect(device) as devices")
+    Optional<Map<String,Object>> shelfSummary(@Param("id") Long id);
 }

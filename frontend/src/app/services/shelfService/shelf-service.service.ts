@@ -30,4 +30,8 @@ export class ShelfService {
   deleteShelf(id:number){
     return this.http.delete(`${this.url}/shelf/${id}`,{responseType:"text"})
   }
+
+  getShelfSummary(id:Number){
+    return this.http.get(`${this.url}/shelf/shelfsummary/${id}`)
+  }
 }

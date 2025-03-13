@@ -1,6 +1,6 @@
 <div style="padding: 0px 10px 0px 10px;">
     <div style="display: flex; justify-content: space-between;">
-      <h1>Shelf Positions</h1>
+      <h1>Shelves</h1>
       <mat-form-field>
         <mat-label>Filter</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
@@ -21,10 +21,11 @@
                 <td>{{shelf.id}}</td>
                 <td>{{shelf.name}}</td>
                 <td>{{shelf.shelfType}}</td>
-                <div>
-                  <td><button type="button" class="btn btn-primary" (click)="openDialog(shelf.id!,shelf.name!,shelf.shelfType!)">Edit</button></td>
-                <td><button type="button" class="btn btn-danger" (click)="delOpenDialog(shelf.id!, shelf.name!, shelf.shelfType!)">🗑️</button></td>
-                </div>
+                <div style="display: flex; flex-direction: row; gap: 7px; align-items: center;">
+                  <td><button mat-mini-fab (click)="openDialog(shelf.id!,shelf.name!,shelf.shelfType!)"><mat-icon>edit</mat-icon></button></td>
+                  <td><button mat-mini-fab (click)="delOpenDialog(shelf.id!, shelf.name!, shelf.shelfType!)"><mat-icon>delete</mat-icon></button></td>
+                  <td><button mat-stroked-button (click)="navigateToShelfSummary(shelf.id!)">Show Summary</button></td>
+              </div>
             </tr>
           }
         </tbody>

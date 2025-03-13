@@ -56,5 +56,13 @@ export const routes: Routes = [
             const m = await import('./components/add-shelfposition/add-shelfposition.component')
             return m.AddShelfpositionComponent;
         }
+    },
+    {
+        path:'shelfSummary/:id',
+        pathMatch:"full",
+        loadComponent: async()=>{
+            const m  = await import('./components/shelf-summary/shelf-summary.component');
+            return m.ShelfSummaryComponent;
+        }
     }
 ];

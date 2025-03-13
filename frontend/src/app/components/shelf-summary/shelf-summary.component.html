@@ -1,0 +1,41 @@
+<div style="padding: 10px;">
+    <h4>Shelf Summary</h4>
+    <div style="display: flex; flex-direction: column; border: 1px solid grey; padding: 10px; border-radius: 10px;">
+        <div style="display: flex; flex-direction: column;">
+            <h4>{{shelfData.shelf?.name}}</h4>
+            <p style="color: grey;"> Shelf Type: {{shelfData.shelf?.shelfType}}</p>
+        </div>
+        @for (item of shelfData.shelfPositions; track $index) {
+            <div style="display: flex; flex-direction: column; border: 1px solid grey; padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                <div style="display: flex; flex-direction: row; justify-content: space-between; ">
+                    <h6>{{item.shelfPosition.name}}</h6>
+                    <div>@if (item.device.length == 0) {
+                        <span style="display: flex; padding:1px 5px; background-color: grey; color: white; font-size: 12px; border-radius: 10px;">Unoccupied</span>    
+                    }
+                    @else {
+                        <span style="display: flex;padding: 1px 5px; background-color: grey; color: white; font-size: 12px; border-radius: 10px;">Occupied</span>    
+                    }
+                    </div>
+                </div>
+                @if (item.device.length != 0) {
+                    @for (device of item.device; track $index) {
+                        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+                             <mat-icon>
+                                 storage
+                             </mat-icon>
+                             <div style="display: flex; flex-direction: column; gap: 0px;">
+                                 <div style="font-size: 15px;">{{device.name}}</div>
+                                 <div style="color: grey; font-size: 13px;">{{device.deviceType}}</div>
+                             </div>
+                        </div>
+                     }
+                }
+                @else {
+                    <div style="color: grey; font-style: italic;">
+                        No Device Connected
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

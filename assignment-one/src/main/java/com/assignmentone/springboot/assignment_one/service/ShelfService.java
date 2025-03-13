@@ -5,8 +5,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
+import org.neo4j.driver.Driver;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.Values;
+import org.neo4j.driver.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +33,9 @@ public class ShelfService {
 
     @Autowired 
     private ShelfPositionRepository shelfPositionRepository;
+
+    @Autowired
+    private Driver driver;
 
     @Transactional
     public ShelfVO saveShelf(ShelfVO shelf){
@@ -132,6 +141,42 @@ public class ShelfService {
             return new ArrayList<>(shelfMap.values());
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public Optional<Map<String,Object>> getShelfSummary(Long id){
+        try(Session session = driver.session()){
+            return session.executeRead(tx -> {
+                var result = tx.run(
+                    "match (shelf:Shelf)-[:HAS]->(shelfPosition:ShelfPosition)\r\n" + //
+                    "where ID(shelf) = $id and shelf.active = true and shelfPosition.active = true\r\n" + //
+                    "optional match (shelfPosition)<-[:HAS]-(device:Device)\r\n" + //
+                    "where device.active = true\r\n" + //
+                    "with shelf, shelfPosition, collect(device) as devices\r\n" + //
+                    "return shelf,\r\n" + //
+                    "collect({shelfPosition: shelfPosition,device:devices}) as shelfPositions",
+                    Values.parameters("id",id)
+                );
+                if(!result.hasNext()){
+                    return Optional.empty();
+                }
+                var record = result.next();
+                System.out.println(record);
+                Map<String,Object> res = new HashMap<>();
+                res.put("shelf", record.get("shelf").asMap());
+
+                List<Map<String,Object>> shelfPositionsList = new ArrayList<>();
+                List<Value> shelfPositionsValue = record.get("shelfPositions").asList(Function.identity());
+
+                for(Value value: shelfPositionsValue){
+                    Map<String,Object> shelfPositionMap = new HashMap<>();
+                    shelfPositionMap.put("shelfPosition", value.get("shelfPosition").asMap());
+                    shelfPositionMap.put("device", value.get("device").asList(Value::asMap));
+                    shelfPositionsList.add(shelfPositionMap);
+                }
+                res.put("shelfPositions", shelfPositionsList);
+                return Optional.of(res);
+            });
         }
     }
 }

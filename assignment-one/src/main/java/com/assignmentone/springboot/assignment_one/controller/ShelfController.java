@@ -2,9 +2,10 @@ package com.assignmentone.springboot.assignment_one.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,5 +81,12 @@ public class ShelfController {
         } catch (Exception e) {
            throw new RuntimeException(e.getMessage());
         }
+    }
+
+
+    @GetMapping("/shelfsummary/{id}")
+    public ResponseEntity<Map<String,Object>> getShelfSummary(@PathVariable Long id){
+        Optional<Map<String,Object>> res = shelfService.getShelfSummary(id);
+        return res.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
