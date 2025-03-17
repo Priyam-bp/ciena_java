@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, inject, signal } from '@angular/core';
+import { Component, Inject, inject, OnDestroy, signal } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogContent } from '@angular/material/dialog';
@@ -10,6 +10,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { ToastrService } from 'ngx-toastr';
 import { DeviceService } from '../../services/deviceService/device.service';
 import { Addshelfpositionrequest } from '../../model/addShelfPositionRequest/addshelfpositionrequest';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-devicehasshelfposition',
@@ -17,7 +18,8 @@ import { Addshelfpositionrequest } from '../../model/addShelfPositionRequest/add
   templateUrl: './devicehasshelfposition.component.html',
   styleUrl: './devicehasshelfposition.component.css'
 })
-export class DevicehasshelfpositionComponent {
+export class DevicehasshelfpositionComponent implements OnDestroy {
+  private subscription : Subscription | undefined;
   toast = inject(ToastrService);
   deviceService = inject(DeviceService);
   selectedShelfId: number | null = null;
@@ -50,7 +52,7 @@ export class DevicehasshelfpositionComponent {
           shelfPositionId: this.shelfPositionId
         }
   
-        this.deviceService.addShelfPositionToDevice(data).subscribe({
+        this.subscription = this.deviceService.addShelfPositionToDevice(data).subscribe({
           next: (res: any)=>{
             console.log(res);
             this.toast.success("Relationship added")
@@ -72,4 +74,10 @@ export class DevicehasshelfpositionComponent {
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
   });
+
+  ngOnDestroy(): void {
+    if(this.subscription){
+      this.subscription.unsubscribe(); 
+    } 
+  }
 }

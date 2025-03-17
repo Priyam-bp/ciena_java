@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Device } from '../../model/device/device';
 import {FormControl, FormsModule, NgForm} from '@angular/forms'
 import { DeviceService } from '../../services/deviceService/device.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-device',
@@ -12,8 +13,8 @@ import { Router } from '@angular/router';
   templateUrl: './add-device.component.html',
   styleUrl: './add-device.component.css'
 })
-export class AddDeviceComponent implements OnInit{
-
+export class AddDeviceComponent implements OnInit,OnDestroy{
+  private subscription: Subscription | undefined;
   deviceService = inject(DeviceService)
   toast = inject(ToastrService)
   router = inject(Router)
@@ -33,7 +34,7 @@ export class AddDeviceComponent implements OnInit{
         return
       }
       
-      this.deviceService.saveDevice(this.device).subscribe({
+      this.subscription = this.deviceService.saveDevice(this.device).subscribe({
         next: (res: Device)=>{
           console.log(res);
           this.toast.success("Device Added Successfully")
@@ -48,5 +49,11 @@ export class AddDeviceComponent implements OnInit{
       console.log(error);
       
     }
+  }
+
+  ngOnDestroy(): void {
+   if(this.subscription){
+    this.subscription.unsubscribe();
+   }
   }
 }

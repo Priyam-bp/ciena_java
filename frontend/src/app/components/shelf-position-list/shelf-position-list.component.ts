@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ShelfPositionService } from '../../services/shelfPositionService/shelf-position-service.service';
 import { ShelfPosition } from '../../model/shelfPosition/shelf-position';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { Shelf } from '../../model/shelf/shelf';
 import * as bootstrap from 'bootstrap';
 import { ShelfService } from '../../services/shelfService/shelf-service.service';
@@ -24,8 +24,8 @@ import { Router } from '@angular/router';
   templateUrl: './shelf-position-list.component.html',
   styleUrl: './shelf-position-list.component.css'
 })
-export class ShelfPositionListComponent implements OnInit {
-
+export class ShelfPositionListComponent implements OnInit,OnDestroy{
+  private subs :Subscription[] | undefined = [];
   shelfPositionService = inject(ShelfPositionService);
   shelfPositionItems = signal<Array<ShelfPosition>>([]);
   selectedShelfPositionId: number|null = null;
@@ -50,17 +50,10 @@ export class ShelfPositionListComponent implements OnInit {
 
   callShelfPositions(){
     try {
-      this.shelfPositionService.getAllShelfPositions()
-      .pipe(
-        catchError((err)=>{
-          console.log(err);
-          return of([]);
-        })
-      )
-      .subscribe((shelfPositions)=>{
+      const sub = this.shelfPositionService.getAllShelfPositions().subscribe((shelfPositions)=>{
         this.shelfPositionItems.set(shelfPositions);
-        
       })
+      this.subs?.push(sub);
     } catch (error) {
       this.toast.error("Unable to fetch Shelf Positions")
     }
@@ -93,7 +86,7 @@ export class ShelfPositionListComponent implements OnInit {
 
   getAvailableShelves(){
     try {
-      this.shelfService.getAvailableShelves().subscribe({
+      const sub = this.shelfService.getAvailableShelves().subscribe({
         next: (res: Array<Shelf>)=>{
           this.availableShelves.set(res);
         },
@@ -101,6 +94,7 @@ export class ShelfPositionListComponent implements OnInit {
           console.log(err);
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       this.toast.error("Unable to fetch shelves")
     }
@@ -124,7 +118,7 @@ export class ShelfPositionListComponent implements OnInit {
   
       console.log(data);
       
-      this.shelfPositionService.addShelftoShelfPosition(data).subscribe({
+      const sub = this.shelfPositionService.addShelftoShelfPosition(data).subscribe({
         next: (res: any)=>{
           console.log(res,"Added");
           this.toast.success("Relationship added");
@@ -136,6 +130,7 @@ export class ShelfPositionListComponent implements OnInit {
           this.toast.error(err.error.message)
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       this.toast.error("Unable to establish relationship")
     }
@@ -154,7 +149,7 @@ export class ShelfPositionListComponent implements OnInit {
   submit = (id: number, shelfPosition: ShelfPosition)=>{
     try {
       console.log("submit called");
-      this.shelfPositionService.editShelfPosition(id,shelfPosition).subscribe({
+      const sub = this.shelfPositionService.editShelfPosition(id,shelfPosition).subscribe({
         next: (res: any)=>{
           console.log(res);
           this.toast.success("Shelf Position Updated")
@@ -166,6 +161,7 @@ export class ShelfPositionListComponent implements OnInit {
           this.toast.error(err.error.message)
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       this.toast.error("Unable to edit, try again")
     }
@@ -187,7 +183,7 @@ export class ShelfPositionListComponent implements OnInit {
     try {
       console.log(id);
 
-      this.shelfPositionService.deleteShelf(id).subscribe({
+      const sub = this.shelfPositionService.deleteShelf(id).subscribe({
         next: (res: any)=>{
           console.log(res);
           this.toast.success("Deleted Succesfully")
@@ -198,6 +194,7 @@ export class ShelfPositionListComponent implements OnInit {
           console.log(err);
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       this.toast.error("Unable to delete")
     }
@@ -225,5 +222,9 @@ export class ShelfPositionListComponent implements OnInit {
   toAddShelf(){
     this.onClose()
     this.router.navigate(['/addshelf'])
+  }
+
+  ngOnDestroy(): void {
+    this.subs?.forEach(sub=>sub.unsubscribe());
   }
 }

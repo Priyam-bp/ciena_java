@@ -1,10 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Shelf } from '../../model/shelf/shelf';
 import { ShelfService } from '../../services/shelfService/shelf-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import {ToastrModule, ToastrService} from 'ngx-toastr'
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-shelf',
@@ -13,8 +14,8 @@ import { Router } from '@angular/router';
   styleUrl: './add-shelf.component.css',
   providers:[]
 })
-export class AddShelfComponent {
-
+export class AddShelfComponent implements OnDestroy{
+  private subscibtion : Subscription | undefined;
   shelfService = inject(ShelfService);
   toast = inject(ToastrService);
   router = inject(Router);
@@ -32,7 +33,7 @@ export class AddShelfComponent {
         this.toast.error("Please fill all shelf details");
         return
       } 
-      this.shelfService.saveShelf(this.shelf.name,this.shelf.shelfType,this.shelfPositionCount).subscribe({
+      this.subscibtion = this.shelfService.saveShelf(this.shelf.name,this.shelf.shelfType,this.shelfPositionCount).subscribe({
         next: (res:Shelf)=>{
           console.log(res);
           this.toast.success("Shelf Added Succesfully")
@@ -45,6 +46,12 @@ export class AddShelfComponent {
       })
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if(this.subscibtion){
+      this.subscibtion.unsubscribe();
     }
   }
 }

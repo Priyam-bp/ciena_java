@@ -1,10 +1,11 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject, Inject, OnDestroy } from '@angular/core';
 import { ShelfPosition } from '../../model/shelfPosition/shelf-position';
 import { FormsModule } from '@angular/forms';
 import { ShelfPositionService } from '../../services/shelfPositionService/shelf-position-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-shelfposition',
@@ -12,7 +13,8 @@ import { Router } from '@angular/router';
   templateUrl: './add-shelfposition.component.html',
   styleUrl: './add-shelfposition.component.css'
 })
-export class AddShelfpositionComponent {
+export class AddShelfpositionComponent implements OnDestroy{
+  private subscribtion : Subscription | undefined;
   shelfPositionService = inject(ShelfPositionService);
   toast = inject(ToastrService);
   router = inject(Router)
@@ -27,7 +29,7 @@ export class AddShelfpositionComponent {
         this.toast.error("Please add Shelf Position Details");
         return;
       }
-      this.shelfPositionService.saveShelfPosition(this.shelfPosition).subscribe({
+      this.subscribtion = this.shelfPositionService.saveShelfPosition(this.shelfPosition).subscribe({
         next: (res: ShelfPosition)=>{
           console.log(this.shelfPosition);
           this.shelfPosition.name = "";
@@ -40,6 +42,12 @@ export class AddShelfpositionComponent {
       })
     } catch (error) {
       console.log(error)
+    }
+  }
+
+  ngOnDestroy(): void {
+    if(this.subscribtion){
+      this.subscribtion.unsubscribe();
     }
   }
 }

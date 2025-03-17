@@ -1,7 +1,7 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ShelfService } from '../../services/shelfService/shelf-service.service';
 import { Shelf } from '../../model/shelf/shelf';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditComponentComponent } from '../edit-component/edit-component.component';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,7 +18,8 @@ import { Router } from '@angular/router';
   templateUrl: './shelf.component.html',
   styleUrl: './shelf.component.css'
 })
-export class ShelfComponent implements OnInit{
+export class ShelfComponent implements OnInit,OnDestroy{
+  private subs : Subscription[] | undefined = [];
   shelfService = inject(ShelfService);
   shelfItems = signal<Array<Shelf>>([]);
   toast = inject(ToastrService);
@@ -40,14 +41,10 @@ export class ShelfComponent implements OnInit{
   }
   callShelf(){
     try {
-      this.shelfService.getAllShelves()
-      .pipe(catchError((err)=>{
-        console.log(err);
-        return of([]);
-      }))
-      .subscribe((shelf)=>{
+      const sub = this.shelfService.getAllShelves().subscribe((shelf)=>{
         this.shelfItems.set(shelf);
       })
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +63,7 @@ export class ShelfComponent implements OnInit{
 
   delSubmit=(id:number)=>{
     try {
-      this.shelfService.deleteShelf(id).subscribe({
+      const sub = this.shelfService.deleteShelf(id).subscribe({
         next: (res: any)=>{
           console.log(res);
           this.toast.success("Shelf Deleted")
@@ -78,6 +75,7 @@ export class ShelfComponent implements OnInit{
           this.toast.error("Unable to delete")
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
       this.toast.error('unable to delete')
@@ -97,7 +95,7 @@ export class ShelfComponent implements OnInit{
 
   submit = (id: number,data: Shelf)=>{
     try {
-      this.shelfService.updateShelf(id,data).subscribe({
+      const sub = this.shelfService.updateShelf(id,data).subscribe({
         next: (res: any)=>{
           console.log(res);
           this.toast.success("Shelf Updated Succesfully");
@@ -109,6 +107,7 @@ export class ShelfComponent implements OnInit{
           this.toast.error("Toast Deleted")
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
       this.toast.error("unable to edit")
@@ -133,5 +132,9 @@ export class ShelfComponent implements OnInit{
   
   navigateToShelfSummary(id:number){
     this.router.navigate([`/shelfSummary/${id}`]);
+  }
+
+  ngOnDestroy(): void {
+    this.subs?.forEach(sub=>sub.unsubscribe());
   }
 }

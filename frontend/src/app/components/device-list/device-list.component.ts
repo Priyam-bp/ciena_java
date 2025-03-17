@@ -1,8 +1,8 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import * as bootstap from 'bootstrap';
 import { Device } from '../../model/device/device';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { DeviceService } from '../../services/deviceService/device.service';
 import { ShelfPosition } from '../../model/shelfPosition/shelf-position';
 import { ShelfPositionService } from '../../services/shelfPositionService/shelf-position-service.service';
@@ -37,8 +37,8 @@ import { Shelf } from '../../model/shelf/shelf';
     },
   ],
 })
-export class DeviceListComponent implements OnInit {
-
+export class DeviceListComponent implements OnInit,OnDestroy {
+  private subs : Subscription[] | undefined = [];
   deviceService = inject(DeviceService); 
   shelfPositionService = inject(ShelfPositionService);
   toast = inject(ToastrService);
@@ -63,7 +63,7 @@ export class DeviceListComponent implements OnInit {
   
   callDevice(){
     try {
-      this.deviceService.getAllDevices().subscribe({
+      const sub = this.deviceService.getAllDevices().subscribe({
         next: (devices: Array<Device>)=>{
           this.deviceItems.set(devices);
         },
@@ -71,6 +71,7 @@ export class DeviceListComponent implements OnInit {
           this.toast.error("Unable to fetch ")
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
     }
@@ -96,13 +97,14 @@ export class DeviceListComponent implements OnInit {
 
   getShelves(){
     try {
-      this.deviceService.getShelfAndShelfPositions().subscribe({
+      const sub = this.deviceService.getShelfAndShelfPositions().subscribe({
         next:(res: any)=>{
           this.shelves = res;
           console.log(res);
           
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       
     }
@@ -110,7 +112,7 @@ export class DeviceListComponent implements OnInit {
 
   getAvailableShelfPositions(){
     try {
-      this.shelfPositionService.getAllShelfPositions().subscribe({
+      const sub = this.shelfPositionService.getAllShelfPositions().subscribe({
         next: (res: Array<ShelfPosition>)=>{
           this.availableShelfPositions.set(res);
         },
@@ -118,6 +120,7 @@ export class DeviceListComponent implements OnInit {
           console.log(err);
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
     }
@@ -146,7 +149,7 @@ export class DeviceListComponent implements OnInit {
     try {
       console.log("Submit called");
     
-      this.deviceService.editDevice(id,deviceObj).subscribe({
+      const sub = this.deviceService.editDevice(id,deviceObj).subscribe({
         next: (res: any) => {
           console.log(res);
           this.toast.success("Device Updated")
@@ -157,6 +160,8 @@ export class DeviceListComponent implements OnInit {
           this.toast.error("Unable to edit, try again")
         }
       });
+
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
       
@@ -183,7 +188,7 @@ export class DeviceListComponent implements OnInit {
       }
       console.log(id);
     
-      this.deviceService.deleteDevice(id).subscribe({
+      const sub = this.deviceService.deleteDevice(id).subscribe({
         next: (res: any)=>{
           console.log(res);
           this.toast.success("Device Deleted Succesfully")
@@ -194,6 +199,7 @@ export class DeviceListComponent implements OnInit {
           this.toast.error("Unable to delete, Try again")
         }
       })
+      this.subs?.push(sub);
     } catch (error) {
       console.log(error);
        
@@ -218,5 +224,9 @@ export class DeviceListComponent implements OnInit {
   toAddShelfPosition(){
     this.onClose();
     this.router.navigate(['/addshelfposition'])
+  }
+
+  ngOnDestroy(): void {
+    this.subs?.forEach(sub=>sub.unsubscribe());
   }
 }
