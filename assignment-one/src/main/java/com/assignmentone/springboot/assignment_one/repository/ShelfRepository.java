@@ -37,7 +37,7 @@ public interface ShelfRepository extends Neo4jRepository<ShelfVO,Long>{
                 "delete r1\r\n" + //
                 "set s.active = false\r\n" + //
                 "set sh.active = false \r\n" + //
-                "return \"deleted\"")
+                "return true")
     Optional<Boolean> deleteShelfById(@Param("id") Long id);
 
     //get all shelves

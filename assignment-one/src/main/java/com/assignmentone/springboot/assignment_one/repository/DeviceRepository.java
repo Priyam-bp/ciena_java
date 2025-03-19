@@ -32,7 +32,7 @@ public interface DeviceRepository extends Neo4jRepository<Device,Long>{
     //delete by id
     @Query("match (d:Device)\r\n" + //
                 "where ID(d) = $id and d.active = true\r\n" + //
-                "match (d)-[r:HAS]->(sh:ShelfPosition)\r\n" + //
+                "optional match (d)-[r:HAS]->(sh:ShelfPosition)\r\n" + //
                 "delete r\r\n" + //
                 "set d.active = false\r\n" + //
                 "return d.name")

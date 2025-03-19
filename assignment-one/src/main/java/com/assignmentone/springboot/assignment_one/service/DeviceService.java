@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ public class DeviceService implements InventoryService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "devices", allEntries = true, beforeInvocation = true)
     public Device saveDevice(Device device){
         try {
             return deviceRepository.save(device);
@@ -42,6 +45,7 @@ public class DeviceService implements InventoryService{
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "devices", key = "#id")
     public Device getDevice(Long id) {
         try {
             Optional<DeviceDTO> res = deviceRepository.getDeviceById(id);
@@ -64,6 +68,7 @@ public class DeviceService implements InventoryService{
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "devices")
     public List<Device> getAllDevices(){
         try {
             List<DeviceDTO> res = deviceRepository.getAllDevices();
@@ -89,12 +94,13 @@ public class DeviceService implements InventoryService{
 
     @Override
     @Transactional
+    @CacheEvict(value = "devices", allEntries = true)
     public String deleteDevice(Long id){
         if(!deviceRepository.deviceExistsById(id)){
             throw new RuntimeException("Device not found");
         }
-        deviceRepository.deleteDeviceById(id);
-        return "Device deleted of id:" + id;
+        Optional<String> name = deviceRepository.deleteDeviceById(id);
+        return "Device deleted of id:" + name;
     }
 
     @Override
